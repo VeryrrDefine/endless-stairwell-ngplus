@@ -10,33 +10,33 @@ function reset() {
     roomsFromStairwell: 0,
     returningToStairwell: false,
     floorDifficulty: 0,
-    totalDifficulty: ExpantaNum(0),
+    totalDifficulty: PowiainaNum(0),
     roomType: 0,
     fightingMonster: false,
     monsterType: 0,
-    monsterHealth: ExpantaNum(100),
-    monsterMaxHealth: ExpantaNum(100),
+    monsterHealth: PowiainaNum(100),
+    monsterMaxHealth: PowiainaNum(100),
     monsterAttackCooldown: 3,
     timeSinceAttack: 20,
     waitingForEnergy: false,
 
     monstersKilled: 0,
 
-    health: ExpantaNum(100),
-    maxHealth: ExpantaNum(100),
+    health: PowiainaNum(100),
+    maxHealth: PowiainaNum(100),
     energy: 100,
-    attackDamage: ExpantaNum(10),
-    level: ExpantaNum(1),
-    xp: ExpantaNum(0),
-    honey: ExpantaNum(0),
-    vanillaHoney: ExpantaNum(0),
+    attackDamage: PowiainaNum(10),
+    level: PowiainaNum(1),
+    xp: PowiainaNum(0),
+    honey: PowiainaNum(0),
+    vanillaHoney: PowiainaNum(0),
 
     fleeCooldown: 0,
 
-    cocoaHoney: ExpantaNum(0),
+    cocoaHoney: PowiainaNum(0),
     altarUpgradesBought: [false, false, false, false, false, false, false],
 
-    honeyplasm: ExpantaNum(0),
+    honeyplasm: PowiainaNum(0),
     sharkUpgradesBought: [false, false, false, false, false, false, false, false, false, false],
 
     cocoaBars: 0,
@@ -48,7 +48,7 @@ function reset() {
     buffTimes: [0, 0, 0],
     deaths: 0,
 
-    hyperplasm: ExpantaNum(0),
+    hyperplasm: PowiainaNum(0),
     combinatorUpgradesBought: [false, false, false, false, false, false, false, false, false, false],
     darkBars: 0,
     starBars: 0,
@@ -56,19 +56,19 @@ function reset() {
 
     gemEelsBeaten: 0,
     bloodGems: 0,
-    monsterBlood: ExpantaNum(0),
+    monsterBlood: PowiainaNum(0),
     //Blood producers (I can't make these an array due to limitations with how the game is loaded)
-    t1bp: ExpantaNum(0),
-    t2bp: ExpantaNum(0),
-    t3bp: ExpantaNum(0),
-    t4bp: ExpantaNum(0),
-    t5bp: ExpantaNum(0),
-    t6bp: ExpantaNum(0),
-    t1ebp: ExpantaNum(0),
-    t2ebp: ExpantaNum(0),
-    t3ebp: ExpantaNum(0),
-    t4ebp: ExpantaNum(0),
-    t5ebp: ExpantaNum(0),
+    t1bp: PowiainaNum(0),
+    t2bp: PowiainaNum(0),
+    t3bp: PowiainaNum(0),
+    t4bp: PowiainaNum(0),
+    t5bp: PowiainaNum(0),
+    t6bp: PowiainaNum(0),
+    t1ebp: PowiainaNum(0),
+    t2ebp: PowiainaNum(0),
+    t3ebp: PowiainaNum(0),
+    t4ebp: PowiainaNum(0),
+    t5ebp: PowiainaNum(0),
     bpMultiplier: 1,
     monsterBloodUpgradesBought: [false, false, false, false, false, false, false, false, false, false],
 
@@ -93,7 +93,7 @@ function reset() {
     bluePermanentBought: 0
   }
 
-  cocoaBoost = ExpantaNum(1)
+  cocoaBoost = PowiainaNum(1)
   fillFloorsWithRooms()
 }
 
@@ -146,7 +146,7 @@ function loadGame(loadgame) {
   //Sets each variable in 'game' to the equivalent variable in 'loadgame' (the saved file)
   for (i=0; i<Object.keys(loadgame).length; i++) {
     if (loadgame[Object.keys(loadgame)[i]] != "undefined") {
-      if (typeof loadgame[Object.keys(loadgame)[i]] == "string") {game[Object.keys(loadgame)[i]] = new ExpantaNum(loadgame[Object.keys(loadgame)[i]])}
+      if (typeof loadgame[Object.keys(loadgame)[i]] == "string") {game[Object.keys(loadgame)[i]] = new PowiainaNum(loadgame[Object.keys(loadgame)[i]])}
       else {game[Object.keys(game)[i]] = loadgame[Object.keys(loadgame)[i]]}
     }
   }
@@ -579,7 +579,7 @@ function updateSmall() {
   game.level = game.xp.div(20).pow(0.5).add(1).floor()
   $("#level").html(format(game.level, 0))
   if (game.level.gte(1e9)) {
-    xpToNextLevel = ExpantaNum(0)
+    xpToNextLevel = PowiainaNum(0)
     document.getElementById("nextLevelText").style.display = "none"
   }
   else {
@@ -587,11 +587,11 @@ function updateSmall() {
     document.getElementById("nextLevelText").style.display = "block"
   }
   levelDist = (game.level.pow(2).mul(20)).sub(game.level.sub(1).pow(2).mul(20))
-  if (game.level.gte(1e9)) {levelDist = ExpantaNum(1)}
+  if (game.level.gte(1e9)) {levelDist = PowiainaNum(1)}
   $("#xpToNextLevel").html(format(xpToNextLevel.div(levelDist).mul(100), 0))
   $("#totalXP").html(format(game.xp, 0))
 
-  game.maxHealth = ExpantaNum(100).mul(ExpantaNum(1.1).pow(game.level.sub(1))).floor()
+  game.maxHealth = PowiainaNum(100).mul(PowiainaNum(1.1).pow(game.level.sub(1))).floor()
   if (game.health.gt(game.maxHealth)) game.health = game.maxHealth
   if (game.health.gt("10^^10")) {$("#healthBarText").html(format(game.health, 0))}
   else {$("#healthBarText").html(format(game.health, 0) + "/" + format(game.maxHealth, 0))}
@@ -599,8 +599,8 @@ function updateSmall() {
   $("#energyBarText").html(Math.floor(game.energy) + "%")
   document.getElementById("energyBarInner").style.width = game.energy + "%"
 
-  if (game.goldenHoney == 0) {game.attackDamage = ExpantaNum(10).mul(ExpantaNum(1.1).pow(game.level.sub(1))).floor()}
-  else {game.attackDamage = ExpantaNum.expansion(11,game.goldenHoney + 5)}
+  if (game.goldenHoney == 0) {game.attackDamage = PowiainaNum(10).mul(PowiainaNum(1.1).pow(game.level.sub(1))).floor()}
+  else {game.attackDamage = PowiainaNum.expansion(11,game.goldenHoney + 5)}
   if (game.buffTimes[0] > 0) game.attackDamage = game.attackDamage.mul(1.75)
   $("#attackDamage").html(format(game.attackDamage, 0))
   $("#monstersKilled").html(format(game.monstersKilled, 0))
@@ -634,8 +634,8 @@ function updateSmall() {
   else {document.getElementById("fleeButton").disabled = true}
 
   cocoaHoneyToGet = game.level.div(125).log().div(Math.log(2)).sub(1).floor()
-  if (cocoaHoneyToGet.lt(0)) cocoaHoneyToGet = ExpantaNum(0)
-  nextCocoaHoneyRequirement = ExpantaNum(500).mul(ExpantaNum(2).pow(cocoaHoneyToGet))
+  if (cocoaHoneyToGet.lt(0)) cocoaHoneyToGet = PowiainaNum(0)
+  nextCocoaHoneyRequirement = PowiainaNum(500).mul(PowiainaNum(2).pow(cocoaHoneyToGet))
   $("#nextCocoaHoneyRequirement").html(format(nextCocoaHoneyRequirement, 0))
   if (game.altarUpgradesBought[2] == true) cocoaHoneyToGet = cocoaHoneyToGet.mul(game.vanillaHoney.add(1))
   if (game.sharkUpgradesBought[1] == true) cocoaHoneyToGet = cocoaHoneyToGet.mul(2)
@@ -648,7 +648,7 @@ function updateSmall() {
     if (game.cocoaBars >= 4) {cocoaHoneyToGet = cocoaHoneyToGet.pow(game.cocoaBars * 10 + 1)}
     else {cocoaHoneyToGet = cocoaHoneyToGet.pow(game.cocoaBars * 2 + 1)}
   }
-  if (game.cocoaBars >= 9) cocoaHoneyToGet = cocoaHoneyToGet.mul(ExpantaNum("10^^10"))
+  if (game.cocoaBars >= 9) cocoaHoneyToGet = cocoaHoneyToGet.mul(PowiainaNum("10^^10"))
   if (game.darkOrbs >= 4) cocoaHoneyToGet = cocoaHoneyToGet.mul(1e10)
   else if (game.darkOrbs >= 3) cocoaHoneyToGet = cocoaHoneyToGet.mul(10000)
   else if (game.darkOrbs >= 2) cocoaHoneyToGet = cocoaHoneyToGet.mul(100)
@@ -657,14 +657,14 @@ function updateSmall() {
   $("#cocoaHoneyToGet").html(format(cocoaHoneyToGet, 0))
 
   $("#cocoaHoney").html(format(game.cocoaHoney, 0))
-  cocoaBoost = ExpantaNum(4).pow(game.cocoaHoney.pow(0.8))
+  cocoaBoost = PowiainaNum(4).pow(game.cocoaHoney.pow(0.8))
   $("#cocoaBoost").html(format(cocoaBoost, 1))
 
   $("#honeyplasm").html(format(game.honeyplasm, 0))
   if (game.honey.gte(20) && game.honeyplasm.gte(1)) {document.getElementById("sharkTrade").disabled = false}
   else {document.getElementById("sharkTrade").disabled = true}
 
-  if (game.cocoaBars >= 10 + game.darkOrbs * 5) {cocoaBarRequirement = ExpantaNum("Infinity")}
+  if (game.cocoaBars >= 10 + game.darkOrbs * 5) {cocoaBarRequirement = PowiainaNum("Infinity")}
   else {cocoaBarRequirement = cocoaBarRequirements[game.cocoaBars]}
   $("#cocoaBarRequirement").html(format(cocoaBarRequirement, 0))
   $("#cocoaBars").html(game.cocoaBars)
@@ -674,11 +674,11 @@ function updateSmall() {
 
   $("#hyperplasm").html(format(game.hyperplasm, 0))
   if (game.combinatorUpgradesBought[5] == true) {
-    hyperplasmCost = ExpantaNum(10).pow(ExpantaNum(10).pow(ExpantaNum(2).pow(game.hyperplasm.div(1000).add(1).tetr(1.2))))
+    hyperplasmCost = PowiainaNum(10).pow(PowiainaNum(10).pow(PowiainaNum(2).pow(game.hyperplasm.div(1000).add(1).tetr(1.2))))
     $("#hyperplasmGain").html("1,000")
   }
   else {
-    hyperplasmCost = ExpantaNum(10).pow(ExpantaNum(10).pow(game.hyperplasm.add(1).tetr(1.2)))
+    hyperplasmCost = PowiainaNum(10).pow(PowiainaNum(10).pow(game.hyperplasm.add(1).tetr(1.2)))
     $("#hyperplasmGain").html("1")
   }
   $("#hyperplasmCost1").html(format(hyperplasmCost, 0))
@@ -1055,7 +1055,7 @@ function enterFloor() {
   }
   game.roomsExplored++
   game.roomsFromStairwell++
-  game.totalDifficulty = ExpantaNum(game.floorDifficulty).add(game.roomsExplored / 100)
+  game.totalDifficulty = PowiainaNum(game.floorDifficulty).add(game.roomsExplored / 100)
   
   if (game.currentFloor > 350) {
     tierMessage = ", tier 8"
@@ -1102,8 +1102,8 @@ function enterFloor() {
 function newRoom() {
   game.roomsExplored++
   if (Math.floor(Math.random() * Math.min(game.roomsExplored - 1, 30)) == 0) {game.roomsFromStairwell++}
-  game.totalDifficulty = ExpantaNum(game.floorDifficulty).add(game.roomsExplored / 100)
-  if (game.currentFloor > 250 && game.currentFloor <= 300 && game.totalDifficulty.gt(5) && game.combinatorUpgrades2Bought[5] != true) game.totalDifficulty = ExpantaNum(5)
+  game.totalDifficulty = PowiainaNum(game.floorDifficulty).add(game.roomsExplored / 100)
+  if (game.currentFloor > 250 && game.currentFloor <= 300 && game.totalDifficulty.gt(5) && game.combinatorUpgrades2Bought[5] != true) game.totalDifficulty = PowiainaNum(5)
   $("#info").html("<b>Info</b><br>You are in an endless expanse of rooms.<br><br>You have explored " + game.roomsExplored + " rooms. You are " + game.roomsFromStairwell + " rooms away from the stairwell. This floor's difficulty is " + game.floorDifficulty + tierMessage + ".")
 
   roomCheck()
@@ -1204,19 +1204,19 @@ function monsterEncounter() {
   document.getElementById("monsterName").innerHTML = monsters[monsterType - 1].name
 
   //Monster health
-  if (game.currentFloor > 350) {game.monsterMaxHealth = ExpantaNum.expansion(11,Math.ceil(10 ** (game.totalDifficulty - 1) * (Math.random() + 1)))}
+  if (game.currentFloor > 350) {game.monsterMaxHealth = PowiainaNum.expansion(11,Math.ceil(10 ** (game.totalDifficulty - 1) * (Math.random() + 1)))}
   else if (game.currentFloor == 349) {
-    game.monsterMaxHealth = ExpantaNum("JJ10000")
+    game.monsterMaxHealth = PowiainaNum("JJ10000")
     game.jellyFought = true
   }
-  else if (game.currentFloor > 304) {game.monsterMaxHealth = ExpantaNum("J" + ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.6)).sub(2).floor())(10,(Math.random() * 8 + 2)))}
-  else if (game.currentFloor == 303) {game.monsterMaxHealth = ExpantaNum(gemEelLevels[game.gemEelsBeaten])}
-  else if (game.currentFloor > 250) {game.monsterMaxHealth = ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.7)).floor())(10,(Math.random() * 8 + 2)).mul("10^^10")}
-  else if (game.currentFloor > 200) {game.monsterMaxHealth = ExpantaNum(10).pent(ExpantaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1.3))))}
-  else if (game.currentFloor > 150) {game.monsterMaxHealth = ExpantaNum(10).tetr(ExpantaNum(monsters[monsterType - 1].health).mul(Math.random() * 0.2 + 0.8).mul(game.totalDifficulty).sub(6))}
-  else if (game.currentFloor > 100) {game.monsterMaxHealth = ExpantaNum(10).pow(ExpantaNum(10).pow(monsters[monsterType - 1].health ** (ExpantaNum(Math.random()).mul(0.25).sub(0.2).add(game.totalDifficulty))))}
-  else if (game.currentFloor > 50) {game.monsterMaxHealth = monsters[monsterType - 1].health.mul(ExpantaNum(1.5).pow(game.totalDifficulty.mul(3).sub(1))).floor()}
-  else {game.monsterMaxHealth = monsters[monsterType - 1].health.mul(ExpantaNum(1.5).pow(game.totalDifficulty.sub(1))).floor()}
+  else if (game.currentFloor > 304) {game.monsterMaxHealth = PowiainaNum("J" + PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.6)).sub(2).floor())(10,(Math.random() * 8 + 2)))}
+  else if (game.currentFloor == 303) {game.monsterMaxHealth = PowiainaNum(gemEelLevels[game.gemEelsBeaten])}
+  else if (game.currentFloor > 250) {game.monsterMaxHealth = PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.7)).floor())(10,(Math.random() * 8 + 2)).mul("10^^10")}
+  else if (game.currentFloor > 200) {game.monsterMaxHealth = PowiainaNum(10).pent(PowiainaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1.3))))}
+  else if (game.currentFloor > 150) {game.monsterMaxHealth = PowiainaNum(10).tetr(PowiainaNum(monsters[monsterType - 1].health).mul(Math.random() * 0.2 + 0.8).mul(game.totalDifficulty).sub(6))}
+  else if (game.currentFloor > 100) {game.monsterMaxHealth = PowiainaNum(10).pow(PowiainaNum(10).pow(monsters[monsterType - 1].health ** (PowiainaNum(Math.random()).mul(0.25).sub(0.2).add(game.totalDifficulty))))}
+  else if (game.currentFloor > 50) {game.monsterMaxHealth = monsters[monsterType - 1].health.mul(PowiainaNum(1.5).pow(game.totalDifficulty.mul(3).sub(1))).floor()}
+  else {game.monsterMaxHealth = monsters[monsterType - 1].health.mul(PowiainaNum(1.5).pow(game.totalDifficulty.sub(1))).floor()}
   game.monsterHealth = game.monsterMaxHealth
   if (game.currentFloor > 100) {$("#monsterHealthBarText").html(format(game.monsterHealth, 0))}
   else {$("#monsterHealthBarText").html(format(game.monsterHealth, 0) + "/" + format(game.monsterMaxHealth, 0))}
@@ -1224,8 +1224,8 @@ function monsterEncounter() {
   
   //Monster damage
   if (game.currentFloor > 100) {$("#monsterDamage").html(format(game.monsterMaxHealth), 0)}
-  else if (game.currentFloor > 50) {$("#monsterDamage").html(format((monsters[monsterType - 1].damage.mul(ExpantaNum(1.2).pow(game.totalDifficulty.mul(3).sub(1))).floor()), 0))}
-  else {$("#monsterDamage").html(format((monsters[monsterType - 1].damage.mul(ExpantaNum(1.3).pow(game.totalDifficulty.sub(1))).floor()), 0))}
+  else if (game.currentFloor > 50) {$("#monsterDamage").html(format((monsters[monsterType - 1].damage.mul(PowiainaNum(1.2).pow(game.totalDifficulty.mul(3).sub(1))).floor()), 0))}
+  else {$("#monsterDamage").html(format((monsters[monsterType - 1].damage.mul(PowiainaNum(1.3).pow(game.totalDifficulty.sub(1))).floor()), 0))}
   if (game.altarUpgradesBought[3] == true) {game.monsterAttackCooldown = 4.5}
   else {game.monsterAttackCooldown = 3}
 
@@ -1286,9 +1286,9 @@ function attack() {
   if (game.energy > 0) {
     game.energy = Math.max(Math.round(game.energy - (4 + 20 / game.timeSinceAttack)), 0)
     game.timeSinceAttack = 1
-    if (game.currentFloor == 349 && game.sharkCutscenesViewed == 2) {game.monsterHealth = ExpantaNum(0)}
+    if (game.currentFloor == 349 && game.sharkCutscenesViewed == 2) {game.monsterHealth = PowiainaNum(0)}
     else {game.monsterHealth = game.monsterHealth.sub(game.attackDamage)}
-    if (game.monsterHealth.lt(0)) game.monsterHealth = ExpantaNum(0)
+    if (game.monsterHealth.lt(0)) game.monsterHealth = PowiainaNum(0)
     if (game.currentFloor > 100) {$("#monsterHealthBarText").html(format(game.monsterHealth, 0))}
     else {$("#monsterHealthBarText").html(format(game.monsterHealth, 0) + "/" + format(game.monsterMaxHealth, 0))}
     document.getElementById("monsterHealthBarInner").style.width = format(game.monsterHealth.div(game.monsterMaxHealth).mul(100), 1) + "%"
@@ -1334,9 +1334,9 @@ function monsterAttack() {
       else {
         game.monsterAttackCooldown = 1.5
         if (game.currentFloor > 100) {game.health = game.health.sub(game.monsterMaxHealth).floor()}
-        else if (game.currentFloor > 50) {game.health = game.health.sub(monsters[monsterType - 1].damage.mul(ExpantaNum(1.2).pow(game.totalDifficulty.mul(3).sub(1))).floor())}
-        else {game.health = game.health.sub(monsters[monsterType - 1].damage.mul(ExpantaNum(1.3).pow(game.totalDifficulty.sub(1))).floor())}
-        if (game.health.lt(0)) game.health = ExpantaNum(0)
+        else if (game.currentFloor > 50) {game.health = game.health.sub(monsters[monsterType - 1].damage.mul(PowiainaNum(1.2).pow(game.totalDifficulty.mul(3).sub(1))).floor())}
+        else {game.health = game.health.sub(monsters[monsterType - 1].damage.mul(PowiainaNum(1.3).pow(game.totalDifficulty.sub(1))).floor())}
+        if (game.health.lt(0)) game.health = PowiainaNum(0)
         if (game.health.eq(0)) battleLose()
       }
     }
@@ -1351,39 +1351,39 @@ function battleWin() {
   if (game.currentFloor <= 100) {xpToGet = game.monsterMaxHealth.div(10).pow(1.3).mul(cocoaBoost)}
   else if (game.currentFloor <= 150) {xpToGet = game.monsterMaxHealth.log().pow(0.4).mul(cocoaBoost)}
   else if (game.currentFloor <= 200) {
-    if (game.cocoaBars >= 15) {xpToGet = game.monsterMaxHealth.tetr(ExpantaNum(500).mul(game.totalDifficulty.div(2).add(0.5)))}
-    else if (game.cocoaBars >= 13) {xpToGet = game.monsterMaxHealth.tetr(ExpantaNum(100).mul(game.totalDifficulty.div(2).add(0.5)))}
-    else if (game.cocoaBars >= 11) {xpToGet = game.monsterMaxHealth.tetr(ExpantaNum(25).mul(game.totalDifficulty.div(2).add(0.5)))}
-    else {xpToGet = game.monsterMaxHealth.tetr(ExpantaNum(6).mul(game.totalDifficulty.div(2).add(0.5)))}
+    if (game.cocoaBars >= 15) {xpToGet = game.monsterMaxHealth.tetr(PowiainaNum(500).mul(game.totalDifficulty.div(2).add(0.5)))}
+    else if (game.cocoaBars >= 13) {xpToGet = game.monsterMaxHealth.tetr(PowiainaNum(100).mul(game.totalDifficulty.div(2).add(0.5)))}
+    else if (game.cocoaBars >= 11) {xpToGet = game.monsterMaxHealth.tetr(PowiainaNum(25).mul(game.totalDifficulty.div(2).add(0.5)))}
+    else {xpToGet = game.monsterMaxHealth.tetr(PowiainaNum(6).mul(game.totalDifficulty.div(2).add(0.5)))}
     if (game.darkOrbs >= 2) xpToGet = xpToGet.tetr(game.totalDifficulty.mul(15))
     if (game.cocoaBars >= 16) xpToGet = xpToGet.tetr(game.totalDifficulty.mul(20 ** (game.cocoaBars - 13)))
   }
   else if (game.currentFloor <= 250) {
-    xpToGet = game.monsterMaxHealth.pent((ExpantaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)).mul(1.2).mul(game.darkBars * 0.1 + 1))).ceil())
-    if (game.darkOrbs >= 4) xpToGet = xpToGet.pent((ExpantaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)).mul(0.8))).ceil())
+    xpToGet = game.monsterMaxHealth.pent((PowiainaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)).mul(1.2).mul(game.darkBars * 0.1 + 1))).ceil())
+    if (game.darkOrbs >= 4) xpToGet = xpToGet.pent((PowiainaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)).mul(0.8))).ceil())
   }
   else if (game.currentFloor <= 300) {
-    if (game.combinatorUpgrades2Bought[9] == true) {xpToGet = ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(25).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).mul(game.starBars).mul(game.monsterBlood.add(1)).pow(game.darkOrbs).floor())(10,(Math.random() * 8 + 2))}
-    else if (game.combinatorUpgrades2Bought[7] == true) {xpToGet = ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(25).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).mul(game.starBars).floor())(10,(Math.random() * 8 + 2))}
-    else if (game.combinatorUpgrades2Bought[3] == true) {xpToGet = ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(25).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).floor())(10,(Math.random() * 8 + 2))}
-    else if (game.combinatorUpgrades2Bought[2] == true) {xpToGet = ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(5).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).floor())(10,(Math.random() * 8 + 2))}
-    else if (game.combinatorUpgrades2Bought[1] == true) {xpToGet = ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(2).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).floor())(10,(Math.random() * 8 + 2))}
-    else {xpToGet = ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).floor())(10,(Math.random() * 8 + 2))}
+    if (game.combinatorUpgrades2Bought[9] == true) {xpToGet = PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(25).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).mul(game.starBars).mul(game.monsterBlood.add(1)).pow(game.darkOrbs).floor())(10,(Math.random() * 8 + 2))}
+    else if (game.combinatorUpgrades2Bought[7] == true) {xpToGet = PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(25).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).mul(game.starBars).floor())(10,(Math.random() * 8 + 2))}
+    else if (game.combinatorUpgrades2Bought[3] == true) {xpToGet = PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(25).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).floor())(10,(Math.random() * 8 + 2))}
+    else if (game.combinatorUpgrades2Bought[2] == true) {xpToGet = PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(5).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).floor())(10,(Math.random() * 8 + 2))}
+    else if (game.combinatorUpgrades2Bought[1] == true) {xpToGet = PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(2).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).floor())(10,(Math.random() * 8 + 2))}
+    else {xpToGet = PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(1 + (game.cocoaBars >= 26) * 0.2).mul(1 + (game.cocoaBars >= 30) * 1000).floor())(10,(Math.random() * 8 + 2))}
   }
-  else if (game.currentFloor == 303) {xpToGet = ExpantaNum(0)}
+  else if (game.currentFloor == 303) {xpToGet = PowiainaNum(0)}
   else if (game.currentFloor > 304 && game.currentFloor <= 348) {
-    if (game.sharkUpgrades2Bought[5] == true) {xpToGet = ExpantaNum("JJ" + ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(game.bloodGems ** 2).floor())(10,(Math.random() * 8 + 2)))}
-    else if (game.sharkUpgrades2Bought[4] == true) {xpToGet = ExpantaNum("JJ" + ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(game.bloodGems).floor())(10,(Math.random() * 8 + 2)))}
-    else if (game.sharkUpgrades2Bought[3] == true) {xpToGet = ExpantaNum("JJ" + ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor())(10,(Math.random() * 8 + 2)))}
-    else if (game.sharkUpgrades2Bought[2] == true) {xpToGet = ExpantaNum("J" + ExpantaNum.hyper(ExpantaNum(10).pent(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor()))(10,(Math.random() * 8 + 2)))}
-    else if (game.sharkUpgrades2Bought[1] == true) {xpToGet = ExpantaNum("J" + ExpantaNum.hyper(ExpantaNum(10).tetr(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor()))(10,(Math.random() * 8 + 2)))}
-    else {xpToGet = ExpantaNum("J" + ExpantaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor())(10,(Math.random() * 8 + 2)).mul(game.monsterBlood))}
+    if (game.sharkUpgrades2Bought[5] == true) {xpToGet = PowiainaNum("JJ" + PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(game.bloodGems ** 2).floor())(10,(Math.random() * 8 + 2)))}
+    else if (game.sharkUpgrades2Bought[4] == true) {xpToGet = PowiainaNum("JJ" + PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(game.bloodGems).floor())(10,(Math.random() * 8 + 2)))}
+    else if (game.sharkUpgrades2Bought[3] == true) {xpToGet = PowiainaNum("JJ" + PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor())(10,(Math.random() * 8 + 2)))}
+    else if (game.sharkUpgrades2Bought[2] == true) {xpToGet = PowiainaNum("J" + PowiainaNum.hyper(PowiainaNum(10).pent(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor()))(10,(Math.random() * 8 + 2)))}
+    else if (game.sharkUpgrades2Bought[1] == true) {xpToGet = PowiainaNum("J" + PowiainaNum.hyper(PowiainaNum(10).tetr(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor()))(10,(Math.random() * 8 + 2)))}
+    else {xpToGet = PowiainaNum("J" + PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor())(10,(Math.random() * 8 + 2)).mul(game.monsterBlood))}
   }
-  else if (game.currentFloor == 349) {xpToGet = ExpantaNum(0)}
+  else if (game.currentFloor == 349) {xpToGet = PowiainaNum(0)}
   else if (game.currentFloor > 350) {xpToGet = game.monsterMaxHealth}
 
   xpToGet = xpToGet.mul(1 + (game.redPermanentBought * 0.05))
-  if (game.level.lte(10) && (game.cocoaHoney.eq(0) || game.altarUpgradesBought[0] == true)) xpToGet = xpToGet.mul(ExpantaNum(1).add(ExpantaNum(10).sub(game.level).mul(0.05)))
+  if (game.level.lte(10) && (game.cocoaHoney.eq(0) || game.altarUpgradesBought[0] == true)) xpToGet = xpToGet.mul(PowiainaNum(1).add(PowiainaNum(10).sub(game.level).mul(0.05)))
   if (game.buffTimes[0] > 0) xpToGet = xpToGet.mul(1.75)
   if (game.darkOrbs >= 4) xpToGet = xpToGet.mul(5000)
   else if (game.darkOrbs >= 3) xpToGet = xpToGet.mul(500)
@@ -1399,7 +1399,7 @@ function battleWin() {
   game.xp = game.xp.add(xpToGet).ceil()
   game.level = game.xp.div(20).pow(0.5).add(1).floor()
 
-  game.maxHealth = ExpantaNum(100).mul(ExpantaNum(1.1).pow(game.level.sub(1))).floor()
+  game.maxHealth = PowiainaNum(100).mul(PowiainaNum(1.1).pow(game.level.sub(1))).floor()
   if (game.health.gt(game.maxHealth)) game.health = game.maxHealth
   $("#healthBarText").html(format(game.health, 0) + "/" + format(game.maxHealth, 0))
   document.getElementById("healthBarInner").style.width = game.health.div(game.maxHealth).mul(100).toNumber() + "%"
@@ -1407,7 +1407,7 @@ function battleWin() {
 
   if (game.level.gte(10) && (game.currentTip == 2 || game.currentTip == 3 || game.currentTip == 4)) game.currentTip = 5
 
-  honeyplasmToGet = ExpantaNum(1)
+  honeyplasmToGet = PowiainaNum(1)
   if (game.sharkUpgradesBought[3] == true) honeyplasmToGet = honeyplasmToGet.mul(game.vanillaHoney.add(1))
   if (game.darkOrbs >= 4) honeyplasmToGet = honeyplasmToGet.mul(1e10)
   else if (game.darkOrbs >= 3) honeyplasmToGet = honeyplasmToGet.mul(10000)
@@ -1425,19 +1425,19 @@ function battleWin() {
 
   if (game.combinatorUpgradesBought[1] == true && game.currentFloor > 200 && game.currentFloor <= 250) {
     if (game.combinatorUpgradesBought[6] == true) {
-      game.honey = game.honey.add(ExpantaNum(10).pow(ExpantaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)).pow(game.starBars + 1))))
-      game.honeyplasm = game.honeyplasm.add(ExpantaNum(10).pow(ExpantaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)).pow(game.starBars + 1))))
+      game.honey = game.honey.add(PowiainaNum(10).pow(PowiainaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)).pow(game.starBars + 1))))
+      game.honeyplasm = game.honeyplasm.add(PowiainaNum(10).pow(PowiainaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)).pow(game.starBars + 1))))
     }
     else {
-      game.honey = game.honey.add(ExpantaNum(10).pow(ExpantaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)))))
-      game.honeyplasm = game.honeyplasm.add(ExpantaNum(10).pow(ExpantaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)))))
+      game.honey = game.honey.add(PowiainaNum(10).pow(PowiainaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)))))
+      game.honeyplasm = game.honeyplasm.add(PowiainaNum(10).pow(PowiainaNum(20).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1)))))
     }
   }
   if (game.combinatorUpgrades2Bought[0] == true && game.currentFloor > 250 && game.currentFloor <= 300) {
     game.hyperplasm = game.hyperplasm.add(game.monsterMaxHealth)
   }
   else if (game.combinatorUpgradesBought[8] == true && game.currentFloor > 200 && game.currentFloor <= 250) {
-    game.hyperplasm = game.hyperplasm.add(ExpantaNum(1.01).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1))))
+    game.hyperplasm = game.hyperplasm.add(PowiainaNum(1.01).pow(monsters[monsterType - 1].health.pow(game.totalDifficulty.sub(1))))
   }
 
   if (game.combinatorUpgrades2Bought[8] == true && game.currentFloor > 250 && game.currentFloor <= 300 && Math.floor(Math.random() * 10) == 0) {game.darkBars += Math.ceil(Math.random() * 3)}
@@ -1657,7 +1657,7 @@ function cocoaReset() {
     if (Math.floor(Math.random() * 100) == 0) {game.currentTip = 10}
     else {game.currentTip = 9}
   }
-  cocoaBoost = ExpantaNum(4).pow(game.cocoaHoney.pow(0.8))
+  cocoaBoost = PowiainaNum(4).pow(game.cocoaHoney.pow(0.8))
   document.getElementsByClassName("container")[1].style.backgroundColor = "#808080"
 
   game.currentFloor = 0
@@ -1668,11 +1668,11 @@ function cocoaReset() {
   game.roomsFromStairwell = 0
   game.returningToStairwell = false
   game.floorDifficulty = 0
-  game.totalDifficulty = ExpantaNum(0)
+  game.totalDifficulty = PowiainaNum(0)
   game.fightingMonster = false
   game.monsterType = 0
-  game.monsterHealth = ExpantaNum(100)
-  game.monsterMaxHealth = ExpantaNum(100)
+  game.monsterHealth = PowiainaNum(100)
+  game.monsterMaxHealth = PowiainaNum(100)
   game.monsterAttackCooldown = 3
   game.timeSinceAttack = 20
   game.waitingForEnergy = false
@@ -1680,18 +1680,18 @@ function cocoaReset() {
   game.monstersKilled = 0
 
   if (game.cocoaBars >= 5 || game.darkOrbs >= 3) {game.xp = cocoaBoost}
-  else if (game.cocoaBars >= 2) {game.xp = ExpantaNum(10000000)}
-  else if (game.cocoaBars >= 1) {game.xp = ExpantaNum(500000)}
-  else if (game.altarUpgradesBought[0] == true) {game.xp = ExpantaNum(5000)}
-  else {game.xp = ExpantaNum(0)}
+  else if (game.cocoaBars >= 2) {game.xp = PowiainaNum(10000000)}
+  else if (game.cocoaBars >= 1) {game.xp = PowiainaNum(500000)}
+  else if (game.altarUpgradesBought[0] == true) {game.xp = PowiainaNum(5000)}
+  else {game.xp = PowiainaNum(0)}
 
   game.level = game.xp.div(20).pow(0.5).add(1).floor()
-  game.maxHealth = ExpantaNum(100).mul(ExpantaNum(1.1).pow(game.level.sub(1))).floor()
+  game.maxHealth = PowiainaNum(100).mul(PowiainaNum(1.1).pow(game.level.sub(1))).floor()
   game.health = game.maxHealth
   game.energy = 100
-  game.attackDamage = ExpantaNum(10)
-  if (game.sharkUpgradesBought[6] != true) game.honey = ExpantaNum(0)
-  if (game.sharkUpgradesBought[7] != true) game.vanillaHoney = ExpantaNum(0)
+  game.attackDamage = PowiainaNum(10)
+  if (game.sharkUpgradesBought[6] != true) game.honey = PowiainaNum(0)
+  if (game.sharkUpgradesBought[7] != true) game.vanillaHoney = PowiainaNum(0)
 
   game.fleeCooldown = 0
   if (game.altarUpgradesBought[1] != true && game.altarUpgradesBought[5] != true) document.getElementById("fleeButton").style.display = "none"
@@ -2032,7 +2032,7 @@ function gainCocoaBars() {
     if (confirm("Are you sure you want to do this? You will lose all of your cocoa honey!")) {
       game.cocoaBars++
       cocoaReset()
-      game.cocoaHoney = ExpantaNum(0)
+      game.cocoaHoney = PowiainaNum(0)
       if (game.cocoaBars >= 10) {
         document.getElementById("darkOrbIcon").style.display = "block"
         document.getElementById("darkOrbText").style.display = "block"
@@ -2134,33 +2134,33 @@ function darkOrbReset() {
   game.roomsFromStairwell = 0
   game.returningToStairwell = false
   game.floorDifficulty = 0
-  game.totalDifficulty = ExpantaNum(0)
+  game.totalDifficulty = PowiainaNum(0)
   game.fightingMonster = false
   game.monsterType = 0
-  game.monsterHealth = ExpantaNum(100)
-  game.monsterMaxHealth = ExpantaNum(100)
+  game.monsterHealth = PowiainaNum(100)
+  game.monsterMaxHealth = PowiainaNum(100)
   game.monsterAttackCooldown = 3
   game.timeSinceAttack = 20
   game.waitingForEnergy = false
 
   game.monstersKilled = 0
 
-  game.health = ExpantaNum(100)
-  game.maxHealth = ExpantaNum(100)
+  game.health = PowiainaNum(100)
+  game.maxHealth = PowiainaNum(100)
   game.energy = 100
-  game.attackDamage = ExpantaNum(10)
-  game.level = ExpantaNum(1)
-  game.xp = ExpantaNum(0)
-  game.honey = ExpantaNum(0)
-  game.vanillaHoney = ExpantaNum(0)
+  game.attackDamage = PowiainaNum(10)
+  game.level = PowiainaNum(1)
+  game.xp = PowiainaNum(0)
+  game.honey = PowiainaNum(0)
+  game.vanillaHoney = PowiainaNum(0)
 
   game.fleeCooldown = 0
 
-  game.cocoaHoney = ExpantaNum(0)
+  game.cocoaHoney = PowiainaNum(0)
   if (game.darkOrbs >= 3) {game.altarUpgradesBought = [false, false, false, false, false, true, false]}
   else {game.altarUpgradesBought = [false, false, false, false, false, false, false]}
 
-  game.honeyplasm = ExpantaNum(0)
+  game.honeyplasm = PowiainaNum(0)
   game.sharkUpgradesBought = [false, false, false, false, false, false, false, false, false, false]
 
   game.cocoaBars = 0
@@ -2168,7 +2168,7 @@ function darkOrbReset() {
   game.runeFragments = [0, 0, 0]
   game.buffTimes = [0, 0, 0]
 
-  game.hyperplasm = ExpantaNum(0)
+  game.hyperplasm = PowiainaNum(0)
   game.combinatorUpgradesBought = [false, false, false, false, false, false, false, false, false, false]
   game.darkBars = 0
   game.starBars = 0
@@ -2277,7 +2277,7 @@ function buyCombinatorUpgrade(x) {
   else if (x==6 && game.starBars >= 1 && game.combinatorUpgradesBought[5] != true) {
     game.combinatorUpgradesBought[5] = true
     document.getElementsByClassName("combinatorUpgrade")[5].disabled = true
-    game.hyperplasm = ExpantaNum(0)
+    game.hyperplasm = PowiainaNum(0)
   }
   else if (x==7 && game.hyperplasm.gte(6000) && game.combinatorUpgradesBought[6] != true) {
     game.combinatorUpgradesBought[6] = true
@@ -2352,79 +2352,79 @@ function buyCombinatorUpgrade2(x) {
 
 function buyBloodProducer(x) {
   if (game.sharkUpgrades2Bought[0] == true) {
-    if (x==1 && ExpantaNum(game.bloodGems).gte(game.t1bp.mul(1000))) {
+    if (x==1 && PowiainaNum(game.bloodGems).gte(game.t1bp.mul(1000))) {
       game.t1bp = game.t1bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==2 && ExpantaNum(game.bloodGems).gte(game.t2bp.mul(1000).add(590))) {
+    else if (x==2 && PowiainaNum(game.bloodGems).gte(game.t2bp.mul(1000).add(590))) {
       game.t2bp = game.t2bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==3 && ExpantaNum(game.bloodGems).gte(game.t3bp.mul(1000).add(650))) {
+    else if (x==3 && PowiainaNum(game.bloodGems).gte(game.t3bp.mul(1000).add(650))) {
       game.t3bp = game.t3bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==4 && ExpantaNum(game.bloodGems).gte(game.t4bp.mul(1000).add(740))) {
+    else if (x==4 && PowiainaNum(game.bloodGems).gte(game.t4bp.mul(1000).add(740))) {
       game.t4bp = game.t4bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==5 && ExpantaNum(game.bloodGems).gte(game.t5bp.mul(1000).add(800))) {
+    else if (x==5 && PowiainaNum(game.bloodGems).gte(game.t5bp.mul(1000).add(800))) {
       game.t5bp = game.t5bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==6 && ExpantaNum(game.bloodGems).gte(game.t6bp.mul(1000).add(900))) {
+    else if (x==6 && PowiainaNum(game.bloodGems).gte(game.t6bp.mul(1000).add(900))) {
       game.t6bp = game.t6bp.add(1)
       bloodProductionUpdate()
     }
   }
   else if (game.monsterBloodUpgradesBought[8] == true) {
-    if (x==1 && ExpantaNum(game.bloodGems).gte(game.t1bp.mul(1000))) {
+    if (x==1 && PowiainaNum(game.bloodGems).gte(game.t1bp.mul(1000))) {
       game.t1bp = game.t1bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==2 && ExpantaNum(game.bloodGems).gte(game.t2bp.mul(1000).add(230))) {
+    else if (x==2 && PowiainaNum(game.bloodGems).gte(game.t2bp.mul(1000).add(230))) {
       game.t2bp = game.t2bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==3 && ExpantaNum(game.bloodGems).gte(game.t3bp.mul(1000).add(270))) {
+    else if (x==3 && PowiainaNum(game.bloodGems).gte(game.t3bp.mul(1000).add(270))) {
       game.t3bp = game.t3bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==4 && ExpantaNum(game.bloodGems).gte(game.t4bp.mul(1000).add(350))) {
+    else if (x==4 && PowiainaNum(game.bloodGems).gte(game.t4bp.mul(1000).add(350))) {
       game.t4bp = game.t4bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==5 && ExpantaNum(game.bloodGems).gte(game.t5bp.mul(1000).add(400))) {
+    else if (x==5 && PowiainaNum(game.bloodGems).gte(game.t5bp.mul(1000).add(400))) {
       game.t5bp = game.t5bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==6 && ExpantaNum(game.bloodGems).gte(game.t6bp.mul(1000).add(450))) {
+    else if (x==6 && PowiainaNum(game.bloodGems).gte(game.t6bp.mul(1000).add(450))) {
       game.t6bp = game.t6bp.add(1)
       bloodProductionUpdate()
     }
   }
   else {
-    if (x==1 && ExpantaNum(game.bloodGems).gte(game.t1bp.add(1))) {
+    if (x==1 && PowiainaNum(game.bloodGems).gte(game.t1bp.add(1))) {
       game.t1bp = game.t1bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==2 && ExpantaNum(game.bloodGems).gte(game.t2bp.mul(3).add(6))) {
+    else if (x==2 && PowiainaNum(game.bloodGems).gte(game.t2bp.mul(3).add(6))) {
       game.t2bp = game.t2bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==3 && ExpantaNum(game.bloodGems).gte(game.t3bp.mul(10).add(15))) {
+    else if (x==3 && PowiainaNum(game.bloodGems).gte(game.t3bp.mul(10).add(15))) {
       game.t3bp = game.t3bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==4 && ExpantaNum(game.bloodGems).gte(game.t4bp.mul(18).add(36))) {
+    else if (x==4 && PowiainaNum(game.bloodGems).gte(game.t4bp.mul(18).add(36))) {
       game.t4bp = game.t4bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==5 && ExpantaNum(game.bloodGems).gte(game.t5bp.mul(30).add(66))) {
+    else if (x==5 && PowiainaNum(game.bloodGems).gte(game.t5bp.mul(30).add(66))) {
       game.t5bp = game.t5bp.add(1)
       bloodProductionUpdate()
     }
-    else if (x==6 && ExpantaNum(game.bloodGems).gte(game.t6bp.mul(50).add(136))) {
+    else if (x==6 && PowiainaNum(game.bloodGems).gte(game.t6bp.mul(50).add(136))) {
       game.t6bp = game.t6bp.add(1)
       bloodProductionUpdate()
     }
@@ -2432,7 +2432,7 @@ function buyBloodProducer(x) {
 }
 
 function bloodProduction() {
-  if (game.sharkUpgrades2Bought[0] == true) {game.monsterBlood = game.monsterBlood.add(ExpantaNum("J" + game.t1bp.add(game.t1ebp).mul(game.bpMultiplier).pow(1 + (game.monsterBloodUpgradesBought[5] == true)).pow(1 + (game.monsterBloodUpgradesBought[6] == true))))}
+  if (game.sharkUpgrades2Bought[0] == true) {game.monsterBlood = game.monsterBlood.add(PowiainaNum("J" + game.t1bp.add(game.t1ebp).mul(game.bpMultiplier).pow(1 + (game.monsterBloodUpgradesBought[5] == true)).pow(1 + (game.monsterBloodUpgradesBought[6] == true))))}
   else if (game.monsterBloodUpgradesBought[5] == true) {game.monsterBlood = game.monsterBlood.add(game.t1bp.add(game.t1ebp).mul(game.bpMultiplier).pow(1 + (game.monsterBloodUpgradesBought[5] == true)).pow(1 + (game.monsterBloodUpgradesBought[6] == true)).tetr(1 + (game.monsterBloodUpgradesBought[7] == true)).pent(1 + (game.monsterBloodUpgradesBought[8] == true)))}
   else {game.monsterBlood = game.monsterBlood.add(game.t1bp.add(game.t1ebp).mul(game.bpMultiplier).pow(1 + (game.monsterBloodUpgradesBought[5] == true)).pow(1 + (game.monsterBloodUpgradesBought[6] == true)))}
   game.t1ebp = game.t1ebp.add(game.t2bp.add(game.t2ebp).mul(game.bpMultiplier))
@@ -2529,17 +2529,17 @@ function buyMonsterBloodUpgrade(x) {
   else if (x==9 && game.cocoaHoney.gte("J1e1e100") && game.monsterBloodUpgradesBought[8] != true) {
     game.monsterBloodUpgradesBought[8] = true
     document.getElementsByClassName("monsterBloodUpgrade")[8].disabled = true
-    game.t1bp = ExpantaNum(1)
-    game.t2bp = ExpantaNum(0)
-    game.t3bp = ExpantaNum(0)
-    game.t4bp = ExpantaNum(0)
-    game.t5bp = ExpantaNum(0)
-    game.t6bp = ExpantaNum(0)
-    game.t1ebp = ExpantaNum(0)
-    game.t2ebp = ExpantaNum(0)
-    game.t3ebp = ExpantaNum(0)
-    game.t4ebp = ExpantaNum(0)
-    game.t5ebp = ExpantaNum(0)
+    game.t1bp = PowiainaNum(1)
+    game.t2bp = PowiainaNum(0)
+    game.t3bp = PowiainaNum(0)
+    game.t4bp = PowiainaNum(0)
+    game.t5bp = PowiainaNum(0)
+    game.t6bp = PowiainaNum(0)
+    game.t1ebp = PowiainaNum(0)
+    game.t2ebp = PowiainaNum(0)
+    game.t3ebp = PowiainaNum(0)
+    game.t4ebp = PowiainaNum(0)
+    game.t5ebp = PowiainaNum(0)
     bloodProductionUpdate()
   }
   else if (x==10 && game.bloodGems >= 561 && game.monsterBloodUpgradesBought[9] != true) {
@@ -2642,17 +2642,17 @@ function buySharkUpgrade2(x) {
   if (x==1 && game.cocoaHoney.gte("JJ50") && game.sharkUpgrades2Bought[0] != true) {
     game.sharkUpgrades2Bought[0] = true
     document.getElementsByClassName("sharkUpgrade2")[0].disabled = true
-    game.t1bp = ExpantaNum(1)
-    game.t2bp = ExpantaNum(0)
-    game.t3bp = ExpantaNum(0)
-    game.t4bp = ExpantaNum(0)
-    game.t5bp = ExpantaNum(0)
-    game.t6bp = ExpantaNum(0)
-    game.t1ebp = ExpantaNum(0)
-    game.t2ebp = ExpantaNum(0)
-    game.t3ebp = ExpantaNum(0)
-    game.t4ebp = ExpantaNum(0)
-    game.t5ebp = ExpantaNum(0)
+    game.t1bp = PowiainaNum(1)
+    game.t2bp = PowiainaNum(0)
+    game.t3bp = PowiainaNum(0)
+    game.t4bp = PowiainaNum(0)
+    game.t5bp = PowiainaNum(0)
+    game.t6bp = PowiainaNum(0)
+    game.t1ebp = PowiainaNum(0)
+    game.t2ebp = PowiainaNum(0)
+    game.t3ebp = PowiainaNum(0)
+    game.t4ebp = PowiainaNum(0)
+    game.t5ebp = PowiainaNum(0)
     bloodProductionUpdate()
   }
   else if (x==2 && game.cocoaHoney.gte("JJ1e80") && game.sharkUpgrades2Bought[1] != true) {
@@ -2686,40 +2686,40 @@ function buySharkUpgrade2(x) {
 }
 
 function buyGoldenUpgrade(x) {
-  if (x==1 && game.cocoaHoney.gte(ExpantaNum.expansion(10,10)) && game.goldenUpgradesBought[0] != true) {
+  if (x==1 && game.cocoaHoney.gte(PowiainaNum.expansion(10,10)) && game.goldenUpgradesBought[0] != true) {
     game.goldenUpgradesBought[0] = true
     document.getElementsByClassName("goldenUpgrade")[0].disabled = true
     document.getElementById("toFloor351Button").style.display = "block"
   }
-  else if (x==2 && game.cocoaHoney.gte(ExpantaNum.expansion(10,15)) && game.goldenUpgradesBought[1] != true) {
+  else if (x==2 && game.cocoaHoney.gte(PowiainaNum.expansion(10,15)) && game.goldenUpgradesBought[1] != true) {
     game.goldenUpgradesBought[1] = true
     document.getElementsByClassName("goldenUpgrade")[1].disabled = true
   }
-  else if (x==3 && game.cocoaHoney.gte(ExpantaNum.expansion(10,25)) && game.goldenUpgradesBought[2] != true) {
+  else if (x==3 && game.cocoaHoney.gte(PowiainaNum.expansion(10,25)) && game.goldenUpgradesBought[2] != true) {
     game.goldenUpgradesBought[2] = true
     document.getElementsByClassName("goldenUpgrade")[2].disabled = true
   }
-  else if (x==4 && game.cocoaHoney.gte(ExpantaNum.expansion(10,50)) && game.goldenUpgradesBought[3] != true) {
+  else if (x==4 && game.cocoaHoney.gte(PowiainaNum.expansion(10,50)) && game.goldenUpgradesBought[3] != true) {
     game.goldenUpgradesBought[3] = true
     document.getElementsByClassName("goldenUpgrade")[3].disabled = true
   }
-  else if (x==5 && game.cocoaHoney.gte(ExpantaNum.expansion(10,100)) && game.goldenUpgradesBought[4] != true) {
+  else if (x==5 && game.cocoaHoney.gte(PowiainaNum.expansion(10,100)) && game.goldenUpgradesBought[4] != true) {
     game.goldenUpgradesBought[4] = true
     document.getElementsByClassName("goldenUpgrade")[4].disabled = true
   }
-  else if (x==6 && game.cocoaHoney.gte(ExpantaNum.expansion(10,500)) && game.goldenUpgradesBought[5] != true) {
+  else if (x==6 && game.cocoaHoney.gte(PowiainaNum.expansion(10,500)) && game.goldenUpgradesBought[5] != true) {
     game.goldenUpgradesBought[5] = true
     document.getElementsByClassName("goldenUpgrade")[5].disabled = true
   }
-  else if (x==7 && game.cocoaHoney.gte(ExpantaNum.expansion(10,5000)) && game.goldenUpgradesBought[6] != true) {
+  else if (x==7 && game.cocoaHoney.gte(PowiainaNum.expansion(10,5000)) && game.goldenUpgradesBought[6] != true) {
     game.goldenUpgradesBought[6] = true
     document.getElementsByClassName("goldenUpgrade")[6].disabled = true
   }
-  else if (x==8 && game.cocoaHoney.gte(ExpantaNum.expansion(10,15000000)) && game.goldenUpgradesBought[7] != true) {
+  else if (x==8 && game.cocoaHoney.gte(PowiainaNum.expansion(10,15000000)) && game.goldenUpgradesBought[7] != true) {
     game.goldenUpgradesBought[7] = true
     document.getElementsByClassName("goldenUpgrade")[7].disabled = true
   }
-  else if (x==9 && game.cocoaHoney.gte(ExpantaNum.expansion(10,1e8)) && game.goldenUpgradesBought[8] != true) {
+  else if (x==9 && game.cocoaHoney.gte(PowiainaNum.expansion(10,1e8)) && game.goldenUpgradesBought[8] != true) {
     game.goldenUpgradesBought[8] = true
     document.getElementsByClassName("goldenUpgrade")[8].disabled = true
   }

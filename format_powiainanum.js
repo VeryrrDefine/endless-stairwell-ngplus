@@ -1,6 +1,7 @@
 // Basically does the opposite of what standardize in ExpantaNum does
 // Set smallTop to true to force the top value in the result below 10
-
+let comma = ","
+let period = "."
 
 
 let MAX_LOGP1_REPEATS = 48
@@ -97,7 +98,7 @@ function formatFP(num, precision=4, small=false, maxDigit = 6){
         let b = 10**(num.array[0]-a)
         return `${formatFP(b,precision2)}e${a}`;
     }
-    else if (num.lt(E.E_MAX_SAFE_INTEGER)) {
+    else if (num.lt(PowiainaNum.E_MAX_SAFE_INTEGER)) {
         a = num.log10().log10().floor().toNumber();
         b = num.log10().div(10**a).toNumber();
         return `e${formatFP(b,precision2)}e${a}`;
@@ -106,7 +107,7 @@ function formatFP(num, precision=4, small=false, maxDigit = 6){
         let b = 10**(num.array[0]-a)
         return `e${formatFP(b,precision2)}e${a}`;
     }
-    else if (num.lt(E.EE_MAX_SAFE_INTEGER)) {
+    else if (num.lt(PowiainaNum.EE_MAX_SAFE_INTEGER)) {
         a = num.log10().log10().log10().floor().toNumber();
         b = num.log10().log10().div(10**a).toNumber();
         return `ee${formatFP(b,precision2)}e${a}`;
@@ -286,7 +287,7 @@ function formatFP(num, precision=4, small=false){
         let b = 10**(num.array[0]-a)
         return `${b.toFixed(precision2)}e${a}`;
     }
-    else if (num.lt(E.E_MAX_SAFE_INTEGER)) {
+    else if (num.lt(PowiainaNum.E_MAX_SAFE_INTEGER)) {
         a = num.log10().log10().floor().toNumber();
         b = num.log10().div(10**a).toNumber();
         return `e${b.toFixed(precision2)}e${a}`;
@@ -295,7 +296,7 @@ function formatFP(num, precision=4, small=false){
         let b = 10**(num.array[0]-a)
         return `e${b.toFixed(precision2)}e${a}`;
     }
-    else if (num.lt(E.EE_MAX_SAFE_INTEGER)) {
+    else if (num.lt(PowiainaNum.EE_MAX_SAFE_INTEGER)) {
         a = num.log10().log10().log10().floor().toNumber();
         b = num.log10().log10().div(10**a).toNumber();
         return `ee${b.toFixed(precision2)}e${a}`;
@@ -371,3 +372,7 @@ function regularFormat(num, precision) {
     else if (f[1].length < precision) return fmt + "0".repeat(precision - f[1].length)
     else return f[0] + period + f[1].substring(0, precision)
 }
+
+format = formatFP
+formatWhole = formatWholeFP
+formatSmall = formatSmallFP
