@@ -101,10 +101,10 @@
           <!--Honey and vanilla honey-->
           <img id="honey1" src="img/honey.png">
           <p id="honeyText1">Honey: <span id="honey">0</span></p>
-          <button id="honeyButton1" onclick="consumeHoney(1)">Consume</button>
+          <button id="honeyButton1" onclick="consumeHoney(1)">Consume(<ins>1</ins>)</button>
           <img id="honey2" src="img/honey2.png">
           <p id="honeyText2">Vanilla honey: <span id="vanillaHoney">0</span></p>
-          <button id="honeyButton2" onclick="consumeHoney(2)">Consume</button>
+          <button id="honeyButton2" onclick="consumeHoney(2)">Consume(<ins>2</ins>)</button>
         </div>
 
         <!--Main div-->
@@ -195,13 +195,13 @@
             <center><button id="cocoaPrestigeButton" style="height: 64px; width: 95%" onclick="cocoaPrestige()">Reset all progress for:<br><span id="cocoaHoneyToGet">0</span> <img src="img/honey3.png" width="16px"> <b>cocoa honey</b><br>Next requires <span id="nextCocoaHoneyRequirement">500</span> levels</button>
 
             <!--Cocoa upgrades-->
-            <button class="cocoaUpgrade" style="margin-top: 16px" onclick="buyAltarUpgrade(1)">Keep 5000 XP on reset<br>Costs 2 cocoa honey</button>
+            <button class="cocoaUpgrade" style="margin-top: 16px" onclick="buyAltarUpgrade(1)">Gain two times more honey<br>Costs 2 cocoa honey</button>
             <button class="cocoaUpgrade" onclick="buyAltarUpgrade(2)">Keep flee button on reset<br>Costs 2 cocoa honey</button>
-            <button class="cocoaUpgrade" onclick="buyAltarUpgrade(3)">Vanilla honey multiplies cocoa honey gain<br>Costs 4 cocoa honey</button>
+            <button class="cocoaUpgrade" onclick="buyAltarUpgrade(3)">Vanilla honey multiplies cocoa honey gain<br>Costs 2 cocoa honey</button>
             <button class="cocoaUpgrade" onclick="buyAltarUpgrade(4)">Enemies' first attack takes 4.5s<br>Costs 35 cocoa honey</button>
             <button class="cocoaUpgrade" onclick="buyAltarUpgrade(5)">Gain more buttons for easy travelling<br>Costs 100 cocoa honey</button>
-            <button class="cocoaUpgrade" onclick="buyAltarUpgrade(6)">Keep one-time items on reset<br>Costs 500 cocoa honey</button>
-            <button class="cocoaUpgrade" onclick="buyAltarUpgrade(7)">Forge your lucky ring into a shadow ring<br>Costs 2000 cocoa honey</button></center>
+            <button class="cocoaUpgrade" onclick="buyAltarUpgrade(6)">XP gain ^1.3<br>Costs 500 cocoa honey</button>
+            <button class="cocoaUpgrade" onclick="buyAltarUpgrade(7)">Forge your lucky ring into a shadow ring, start XP based on variable cocoaBoost<br>Costs 2000 cocoa honey</button></center>
           </div>
 
           <!--Shark shop div-->
@@ -226,7 +226,7 @@
           <!--Cocoa bar div-->
           <div id="cocoaBarDiv">
             <div id="cocoaBarMilestoneInfo"><p id="cocoaBarMilestoneText" style="margin-top: 0; margin-bottom: 0;"><span style="font-size: 33px; line-height: 42px;">1 cocoa bar</span><br>Keep 1,000,000 XP on reset</p></div>
-            <center><button style="height: 44px; margin-top: 10px" id="getCocoaBarsButton" onclick="gainCocoaBars()">Turn all of your cocoa honey into a <img src="img/cocoaBar.png" width="16px"> <b>cocoa bar</b><br>Requires <span id="cocoaBarRequirement">1.000e10</span> cocoa honey</button><br><br><p style="font-size: 22px">Cocoa bar milestones</p>
+            <center><button style="height: 44px; margin-top: 10px" id="getCocoaBarsButton" onclick="gainCocoaBars()">Turn all of your cocoa honey into a <img src="img/cocoaBar.png" width="16px"> <b>cocoa bar</b> (only do cocoa reset)<br>Requires <span id="cocoaBarRequirement">1.000e10</span> cocoa honey</button><br><br><p style="font-size: 22px">Cocoa bar milestones</p>
 
             <!--Cocoa bar milestones-->
             <div class="cocoaBarMilestoneDiv" onmouseover="displayCBM(1)" onmouseout="hideCBM()">1</div>
@@ -285,7 +285,7 @@
             <button class="combinatorUpgrade2" onclick="buyCombinatorUpgrade2(7)">Tier 6 enemies have a chance of dropping dark bars<br>Requires 1J2,000 cocoa honey</button>
             <button class="combinatorUpgrade2" onclick="buyCombinatorUpgrade2(8)">Star bars increase tier 6 XP gain<br>Requires 8 star bars</button>
             <button class="combinatorUpgrade2" onclick="buyCombinatorUpgrade2(9)">Tier 6 enemies may drop multiple dark bars<br>Requires 1J40,000 cocoa honey</button>
-            <button class="combinatorUpgrade2" onclick="buyCombinatorUpgrade2(10)">Dark orbs massively increase tier 6 XP gain<br>Requires 1J100,000 cocoa honey</button>
+            <button class="combinatorUpgrade2" onclick="buyCombinatorUpgrade2(10)">Dark orbs massively increase tier 6 XP gain<br>Requires 1J10,000 cocoa honey</button>
             <button class="combinatorUpgrade2" onclick="buyCombinatorUpgrade2(11)">Forge your hyper gem into a star gem<br>Requires 1J1.000e29 cocoa honey and 4 dark orbs</button></center>
           </div>
 
@@ -319,13 +319,13 @@
             <h2 style="font-size: 26px; color: #602020; margin-bottom: 20px;">Monster blood upgrades</h2>
             <center><button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(1)">All blood production is doubled<br>Requires J1e44 cocoa honey</button>
             <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(2)">All blood production is tripled<br>Requires J1e55 cocoa honey</button>
-            <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(3)">Dark orbs multiply blood production<br>Requires J1e69 cocoa honey</button>
-            <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(4)">Gain 100 free tier 5 producers<br>Requires J1e87 cocoa honey</button>
+            <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(3)">Dark orbs multiply blood production<br>Requires J1e62 cocoa honey</button>
+            <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(4)">Gain 100 free tier 5 producers<br>Requires J1e80 cocoa honey</button>
             <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(5)">All blood production is multiplied by 10<br>Requires J1e100 cocoa honey</button>
             <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(6)">Monster blood production is squared<br>Requires J1e122 cocoa honey</button>
-            <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(7)">Monster blood production is squared again<br>Requires J1e222 cocoa honey</button>
-            <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(8)">Monster blood production is tetrated by 2<br>Requires J1e420 cocoa honey</button>
-            <button class="monsterBloodUpgrade" style="height: 48px" onclick="buyMonsterBloodUpgrade(9)">Monster blood production is pentated by 2, but lose all producers,<br>and producer cost goes up dramatically<br>Requires Je1e100 cocoa honey</button>
+            <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(7)">Monster blood production is squared again<br>Requires J1e122 cocoa honey</button>
+            <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(8)">Monster blood production is tetrated by 2<br>Requires J1e122 cocoa honey</button>
+            <button class="monsterBloodUpgrade" style="height: 48px" onclick="buyMonsterBloodUpgrade(9)">Monster blood production is pentated by 2, but lose all producers,<br>and producer cost goes up dramatically<br>Requires Je1e80 cocoa honey</button>
             <button class="monsterBloodUpgrade" onclick="buyMonsterBloodUpgrade(10)">Forge the <b>super blood gem</b><br>Requires 561 blood gems</button></center>
           </div>
 
@@ -335,7 +335,7 @@
             <p id="sharkText2"></p><br>
             <button id="continueButton" onclick="sharkDialogueContinue()">Continue</button>
             <button class="sharkUpgrade2" style="margin-left: 10px; margin-top: 120px; height: 48px;" onclick="buySharkUpgrade2(1)">Monster blood production is massively increased, but lose all producers,<br>and producer cost goes up dramatically<br>Requires J1J50 cocoa honey</button>
-            <button class="sharkUpgrade2" style="margin-left: 10px" onclick="buySharkUpgrade2(2)">Tier 7 enemies drop far more XP (1/3)<br>Requires JJ1e80 cocoa honey</button>
+            <button class="sharkUpgrade2" style="margin-left: 10px" onclick="buySharkUpgrade2(2)">Tier 7 enemies drop far more XP (1/3)<br>Requires JJ1e58 cocoa honey</button>
             <button class="sharkUpgrade2" onclick="buySharkUpgrade2(3)">Tier 7 enemies drop far more XP (2/3)<br>Requires JJ1F60 cocoa honey</button>
             <button class="sharkUpgrade2" style="margin-left: 10px" onclick="buySharkUpgrade2(4)">Tier 7 enemies drop far more XP (3/3)<br>Requires JJ1G60 cocoa honey</button>
             <button class="sharkUpgrade2" onclick="buySharkUpgrade2(5)">Blood gems increase tier 7 XP gain<br>Requires 1,000 blood gems</button>
@@ -352,9 +352,9 @@
             <button class="goldenUpgrade" onclick="buyGoldenUpgrade(4)">Double golden honey gain (3/3)<br>Requires 1K50 cocoa honey</button>
             <button class="goldenUpgrade" onclick="buyGoldenUpgrade(5)">Tier 8 enemies always drop golden honey<br>Requires 1K100 cocoa honey</button>
             <button class="goldenUpgrade" onclick="buyGoldenUpgrade(6)">Log(golden honey) multiplies golden honey gain<br>Requires 1K500 cocoa honey</button>
-            <button class="goldenUpgrade" onclick="buyGoldenUpgrade(7)">Blood gems multiply golden honey gain<br>Requires 1K5,000 cocoa honey</button>
-            <button class="goldenUpgrade" onclick="buyGoldenUpgrade(8)">Floor difficulty multiplies golden honey gain<br>Requires K15,000,000 cocoa honey</button>
-            <button class="goldenUpgrade" onclick="buyGoldenUpgrade(9)" style="margin-top: 20px; background-color: #a0a0a0;">Call upon the power of your SICK ASS GUNS to multiply golden honey gain by 25,000<br>Requires K100,000,000 cocoa honey</button></center>
+            <button class="goldenUpgrade" onclick="buyGoldenUpgrade(7)">Blood gems multiply golden honey gain<br>Requires 1K1,700 cocoa honey</button>
+            <button class="goldenUpgrade" onclick="buyGoldenUpgrade(8)">Floor difficulty multiplies golden honey gain<br>Requires K13,000,000 cocoa honey</button>
+            <button class="goldenUpgrade" onclick="buyGoldenUpgrade(9)" style="margin-top: 20px; background-color: #a0a0a0;">Call upon the power of your SICK ASS GUNS to multiply golden honey gain by 25,000<br>Requires K85,000,000 cocoa honey</button></center>
           </div>
 
           <!--Golden eel div-->
@@ -367,15 +367,16 @@
           </div>
 
           <!--Ending div-->
-          <div id="endingDiv">
+          <!--<div id="endingDiv">
             <p id="finalTime"></p>
             <p id="endingText">Endless Stairwell - Eel arc</p>
             <p id="endingText2">End</p>
           </div>
+        -->
 
           <!--Dark orb div-->
           <div id="darkOrbDiv">
-            <center><button style="height:64px; margin-top: 10px" onclick="darkOrbPrestige()">Erase ALL PROGRESS to gain a <img src="img/darkOrb.png" width="16px"> <b>dark orb</b>,<br>Which gives multiple large boosts/bonuses<br>Requires <span id="darkOrbRequirement">1.000F100</span> cocoa honey</button></center>
+            <center><button style="height:64px; margin-top: 10px" onclick="darkOrbPrestige()">Erase <del>ALL</del> a part of progress to gain a <img src="img/darkOrb.png" width="16px"> <b>dark orb</b>,<br>Which gives multiple large boosts/bonuses<br>Requires <span id="darkOrbRequirement">1.000F100</span> cocoa honey</button></center>
             <div id="darkOrbInnerDiv">
               <p id="darkOrbBonuses" style="margin-left: 0; margin-top: 10px">Current bonuses:<br>None</p>
             </div>
@@ -488,7 +489,7 @@
     <script src="jquery-3.6.0.min.js"></script>
     <script src="Mousetrap.js"></script>
     <script src="PowiainaNum.js"></script>
-    <script src="format_powiainanum.js"></script>
+    <script src="format-powiainanum.js"></script>
     <script src="constants.js"></script>
     <script src="script.js" defer></script>
     <script src="hotkeys.js" defer></script>

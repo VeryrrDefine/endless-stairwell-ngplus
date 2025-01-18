@@ -577,6 +577,11 @@ setInterval(timePlayedUp, 100)
 //Update to run every frame (15ms)
 function updateSmall() {
   game.level = game.xp.div(20).pow(0.5).add(1).floor()
+  if (game.darkOrbs >= 1){
+    game.xp = game.xp.max(1000000)
+    game.honey = game.honey.max(30)
+    game.vanillaHoney = game.vanillaHoney.max(30)
+  }
   $("#level").html(format(game.level, 0))
   if (game.level.gte(1e9)) {
     xpToNextLevel = PowiainaNum(0)
@@ -596,6 +601,7 @@ function updateSmall() {
   if (game.health.gt("10^^10")) {$("#healthBarText").html(format(game.health, 0))}
   else {$("#healthBarText").html(format(game.health, 0) + "/" + format(game.maxHealth, 0))}
   document.getElementById("healthBarInner").style.width = game.health.div(game.maxHealth).mul(100).toNumber() + "%"
+  if (game.health.gt("10^^10")) document.getElementById("healthBarInner").style.width = "100%"
   $("#energyBarText").html(Math.floor(game.energy) + "%")
   document.getElementById("energyBarInner").style.width = game.energy + "%"
 
@@ -639,6 +645,7 @@ function updateSmall() {
   $("#nextCocoaHoneyRequirement").html(format(nextCocoaHoneyRequirement, 0))
   if (game.altarUpgradesBought[2] == true) cocoaHoneyToGet = cocoaHoneyToGet.mul(game.vanillaHoney.add(1))
   if (game.sharkUpgradesBought[1] == true) cocoaHoneyToGet = cocoaHoneyToGet.mul(2)
+  if (game.altarUpgradesBought[0] == true) cocoaHoneyToGet = cocoaHoneyToGet.mul(2)
   if (game.sharkUpgradesBought[5] == true) cocoaHoneyToGet = cocoaHoneyToGet.mul(2)
   if (game.darkOrbs >= 2) {
     if (game.cocoaBars >= 4) {cocoaHoneyToGet = cocoaHoneyToGet.pow(game.cocoaBars * 500 + 1)}
@@ -921,7 +928,7 @@ function updateInfo() {
       document.getElementById("goldenEelDiv").style.display = "none"
       game.fightingMonster = false
     }
-    if (game.currentFloor == 500) {
+    /*if (game.currentFloor == 500) {
       document.getElementById("endingDiv").style.display = "block"
       if (game.currentTip == 20) game.currentTip = 21
       if (game.finalTime < 10) {
@@ -933,7 +940,7 @@ function updateInfo() {
         $("#finalTime").html("Final time: " + timeString)
       }
     }
-    else {document.getElementById("endingDiv").style.display = "none"}
+    else {document.getElementById("endingDiv").style.display = "none"}*/
     if (game.currentFloor == -1) {document.getElementById("darkOrbDiv").style.display = "block"}
     else {document.getElementById("darkOrbDiv").style.display = "none"}
   }
@@ -1220,7 +1227,9 @@ function monsterEncounter() {
   game.monsterHealth = game.monsterMaxHealth
   if (game.currentFloor > 100) {$("#monsterHealthBarText").html(format(game.monsterHealth, 0))}
   else {$("#monsterHealthBarText").html(format(game.monsterHealth, 0) + "/" + format(game.monsterMaxHealth, 0))}
-  document.getElementById("monsterHealthBarInner").style.width = format(game.monsterHealth.div(game.monsterMaxHealth).mul(100), 1) + "%"
+  if (game.currentFloor > 100) document.getElementById("monsterHealthBarInner").style.width = "100%"
+  else document.getElementById("monsterHealthBarInner").style.width = format(game.monsterHealth.div(game.monsterMaxHealth).mul(100), 1) + "%"
+  
   
   //Monster damage
   if (game.currentFloor > 100) {$("#monsterDamage").html(format(game.monsterMaxHealth), 0)}
@@ -1233,16 +1242,16 @@ function monsterEncounter() {
 }
 
 function randomItem() {
-  if (Math.floor(Math.random() * 100) >= 25) {
-    if (Math.floor(Math.random() * 3) == 0) {
+  if (Math.floor(Math.random() * 100) >= 30) {
+    if (Math.floor(Math.random()*3) == 0) {
       game.runeFragments[0]++
       $("#roomInfo").html(document.getElementById("roomInfo").innerHTML + "<br><span style='color: #b00000'>+1 red rune fragment</span>")
     }
-    else if (Math.floor(Math.random() * 2) == 0) {
+    if (Math.floor(Math.random()*2) == 0) {
       game.runeFragments[1]++
       $("#roomInfo").html(document.getElementById("roomInfo").innerHTML + "<br><span style='color: #00b000'>+1 green rune fragment</span>")
     }
-    else {
+    if (Math.floor(Math.random()*2) == 0){
       game.runeFragments[2]++
       $("#roomInfo").html(document.getElementById("roomInfo").innerHTML + "<br><span style='color: #0000b0'>+1 blue rune fragment</span>")
     }
@@ -1372,12 +1381,12 @@ function battleWin() {
   }
   else if (game.currentFloor == 303) {xpToGet = PowiainaNum(0)}
   else if (game.currentFloor > 304 && game.currentFloor <= 348) {
-    if (game.sharkUpgrades2Bought[5] == true) {xpToGet = PowiainaNum("JJ" + PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(game.bloodGems ** 2).floor())(10,(Math.random() * 8 + 2)))}
-    else if (game.sharkUpgrades2Bought[4] == true) {xpToGet = PowiainaNum("JJ" + PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(game.bloodGems).floor())(10,(Math.random() * 8 + 2)))}
-    else if (game.sharkUpgrades2Bought[3] == true) {xpToGet = PowiainaNum("JJ" + PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor())(10,(Math.random() * 8 + 2)))}
-    else if (game.sharkUpgrades2Bought[2] == true) {xpToGet = PowiainaNum("J" + PowiainaNum.hyper(PowiainaNum(10).pent(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor()))(10,(Math.random() * 8 + 2)))}
-    else if (game.sharkUpgrades2Bought[1] == true) {xpToGet = PowiainaNum("J" + PowiainaNum.hyper(PowiainaNum(10).tetr(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor()))(10,(Math.random() * 8 + 2)))}
-    else {xpToGet = PowiainaNum("J" + PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor())(10,(Math.random() * 8 + 2)).mul(game.monsterBlood))}
+    if (game.sharkUpgrades2Bought[5] == true) {xpToGet = PowiainaNum(PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(game.bloodGems ** 2).floor())(10,(Math.random() * 8 + 2))).add1J().add1J()}
+    else if (game.sharkUpgrades2Bought[4] == true) {xpToGet = PowiainaNum(PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).mul(game.bloodGems).floor())(10,(Math.random() * 8 + 2))).add1J().add1J()}
+    else if (game.sharkUpgrades2Bought[3] == true) {xpToGet = PowiainaNum(PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor())(10,(Math.random() * 8 + 2))).add1J().add1J()}
+    else if (game.sharkUpgrades2Bought[2] == true) {xpToGet = PowiainaNum(PowiainaNum.hyper(PowiainaNum(10).pent(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor()))(10,(Math.random() * 8 + 2))).add1J()}
+    else if (game.sharkUpgrades2Bought[1] == true) {xpToGet = PowiainaNum(PowiainaNum.hyper(PowiainaNum(10).tetr(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor()))(10,(Math.random() * 8 + 2))).add1J()}
+    else {xpToGet = PowiainaNum(PowiainaNum.hyper(monsters[monsterType - 1].health.mul(game.totalDifficulty.sub(0.3)).floor())(10,(Math.random() * 8 + 2)).mul(game.monsterBlood).add1J())}
   }
   else if (game.currentFloor == 349) {xpToGet = PowiainaNum(0)}
   else if (game.currentFloor > 350) {xpToGet = game.monsterMaxHealth}
@@ -1389,12 +1398,16 @@ function battleWin() {
   else if (game.darkOrbs >= 3) xpToGet = xpToGet.mul(500)
   else if (game.darkOrbs >= 2) xpToGet = xpToGet.mul(100)
   else if (game.darkOrbs >= 1) xpToGet = xpToGet.mul(25)
+  xpToGet = xpToGet.mul(30)
   if (game.xp.add(xpToGet).gte(4980021) && game.sharkUpgradesBought[0] != true) {
     xpToGet = xpToGet.pow(0.9).div(5)
     $("#XPSoftcap").html(" (softcapped)")
   }
   else {
     $("#XPSoftcap").html("")
+  }
+  if (game.altarUpgradesBought[5]){
+    xpToGet = xpToGet.pow(1.3)
   }
   game.xp = game.xp.add(xpToGet).ceil()
   game.level = game.xp.div(20).pow(0.5).add(1).floor()
@@ -1413,7 +1426,8 @@ function battleWin() {
   else if (game.darkOrbs >= 3) honeyplasmToGet = honeyplasmToGet.mul(10000)
   else if (game.darkOrbs >= 2) honeyplasmToGet = honeyplasmToGet.mul(100)
   else if (game.darkOrbs >= 1) honeyplasmToGet = honeyplasmToGet.mul(10)
-  if (game.currentFloor > 100 && Math.floor(Math.random() * 100) < Math.min(15 + (Math.floor(game.roomsExplored / 20)), 40) * (game.floorDifficulty / 4 + 0.75)) game.honeyplasm = game.honeyplasm.add(honeyplasmToGet)
+  if (game.currentFloor > 100 && Math.floor(Math.random() * 100) < Math.min(15 + (Math.floor(game.roomsExplored / 20)), 40) * (game.floorDifficulty / 4 + 0.75)) 
+    game.honeyplasm = game.honeyplasm.add(honeyplasmToGet)
 
   if (game.currentFloor > 100 && game.sharkUpgradesBought[4] == true) {
     if (game.darkOrbs >= 4) {game.honey = game.honey.add(1e10 * 2 ** game.cocoaBars)}
@@ -1443,7 +1457,7 @@ function battleWin() {
   if (game.combinatorUpgrades2Bought[8] == true && game.currentFloor > 250 && game.currentFloor <= 300 && Math.floor(Math.random() * 10) == 0) {game.darkBars += Math.ceil(Math.random() * 3)}
   else if (game.combinatorUpgrades2Bought[6] == true && game.currentFloor > 250 && game.currentFloor <= 300 && Math.floor(Math.random() * 10) == 0) {game.darkBars++}
 
-  if (game.currentFloor > 350 && (Math.floor(Math.random() * 8) == 0 || game.goldenUpgradesBought[4] == true)) {
+  if (game.currentFloor > 350 && (Math.floor(Math.random() * 2) == 0 || game.goldenUpgradesBought[4] == true)) {
     if (game.goldenUpgradesBought[8] == true) {game.goldenHoney += Math.floor(200000 * Math.log(game.goldenHoney) * game.bloodGems * game.floorDifficulty)}
     else if (game.goldenUpgradesBought[7] == true) {game.goldenHoney += Math.floor(8 * Math.log(game.goldenHoney) * game.bloodGems * game.floorDifficulty)}
     else if (game.goldenUpgradesBought[6] == true) {game.goldenHoney += Math.floor(8 * Math.log(game.goldenHoney) * game.bloodGems)}
@@ -1662,8 +1676,6 @@ function cocoaReset() {
 
   game.currentFloor = 0
 
-  if (game.altarUpgradesBought[5] != true) game.specialItemsAcquired = [false, false]
-
   game.roomsExplored = 0
   game.roomsFromStairwell = 0
   game.returningToStairwell = false
@@ -1680,10 +1692,8 @@ function cocoaReset() {
   game.monstersKilled = 0
 
   if (game.cocoaBars >= 5 || game.darkOrbs >= 3) {game.xp = cocoaBoost}
-  else if (game.cocoaBars >= 2) {game.xp = PowiainaNum(10000000)}
-  else if (game.cocoaBars >= 1) {game.xp = PowiainaNum(500000)}
-  else if (game.altarUpgradesBought[0] == true) {game.xp = PowiainaNum(5000)}
-  else {game.xp = PowiainaNum(0)}
+  else if (game.altarUpgradesBought[6]) {game.xp = PowiainaNum(cocoaBoost.pow(0.5).max(50000))}
+  else {game.xp = PowiainaNum(5000)}
 
   game.level = game.xp.div(20).pow(0.5).add(1).floor()
   game.maxHealth = PowiainaNum(100).mul(PowiainaNum(1.1).pow(game.level.sub(1))).floor()
@@ -1696,7 +1706,6 @@ function cocoaReset() {
   game.fleeCooldown = 0
   if (game.altarUpgradesBought[1] != true && game.altarUpgradesBought[5] != true) document.getElementById("fleeButton").style.display = "none"
 
-  game.runeFragments = [0, 0, 0]
   game.smithFloor = 0
   game.buffTimes = [0, 0, 0]
 
@@ -1831,8 +1840,8 @@ function buyAltarUpgrade(x) {
     game.altarUpgradesBought[1] = true
     document.getElementsByClassName("cocoaUpgrade")[1].disabled = true
   }
-  else if (x==3 && game.cocoaHoney.gte(4) && game.altarUpgradesBought[2] != true) {
-    game.cocoaHoney = game.cocoaHoney.sub(4)
+  else if (x==3 && game.cocoaHoney.gte(2) && game.altarUpgradesBought[2] != true) {
+    game.cocoaHoney = game.cocoaHoney.sub(2)
     game.altarUpgradesBought[2] = true
     document.getElementsByClassName("cocoaUpgrade")[2].disabled = true
   }
@@ -2032,6 +2041,8 @@ function gainCocoaBars() {
     if (confirm("Are you sure you want to do this? You will lose all of your cocoa honey!")) {
       game.cocoaBars++
       cocoaReset()
+      
+      /*
       game.cocoaHoney = PowiainaNum(0)
       if (game.cocoaBars >= 10) {
         document.getElementById("darkOrbIcon").style.display = "block"
@@ -2048,7 +2059,7 @@ function gainCocoaBars() {
         document.getElementById("darkBarText").style.display = "block"
         document.getElementById("starBarIcon").style.display = "block"
         document.getElementById("starBarText").style.display = "block"
-      }
+      }*/
     }
   }
 }
@@ -2128,7 +2139,7 @@ function darkOrbReset() {
   fillFloorsWithRooms()
   if (game.currentTip == 13) game.currentTip = 14
 
-  if (game.darkOrbs < 3) game.specialItemsAcquired = [false, false]
+  if (game.darkOrbs < 3) game.specialItemsAcquired = [true, false]
 
   game.roomsExplored = 0
   game.roomsFromStairwell = 0
@@ -2150,22 +2161,21 @@ function darkOrbReset() {
   game.energy = 100
   game.attackDamage = PowiainaNum(10)
   game.level = PowiainaNum(1)
-  game.xp = PowiainaNum(0)
-  game.honey = PowiainaNum(0)
-  game.vanillaHoney = PowiainaNum(0)
+  game.xp = game.xp.min(1000000)
+  game.honey = game.honey.min(20)
+  game.vanillaHoney = game.vanillaHoney.min(20)
 
   game.fleeCooldown = 0
 
   game.cocoaHoney = PowiainaNum(0)
-  if (game.darkOrbs >= 3) {game.altarUpgradesBought = [false, false, false, false, false, true, false]}
-  else {game.altarUpgradesBought = [false, false, false, false, false, false, false]}
+  if (game.darkOrbs >= 3) {game.altarUpgradesBought = [false, false, false, false, true, true, false]}
+  else {game.altarUpgradesBought = [false, false, false, false, true, false, false]}
 
   game.honeyplasm = PowiainaNum(0)
-  game.sharkUpgradesBought = [false, false, false, false, false, false, false, false, false, false]
+  game.sharkUpgradesBought = [false, false, true, false, false, false, false, false, false, false]
 
   game.cocoaBars = 0
 
-  game.runeFragments = [0, 0, 0]
   game.buffTimes = [0, 0, 0]
 
   game.hyperplasm = PowiainaNum(0)
@@ -2179,11 +2189,11 @@ function darkOrbReset() {
   document.getElementsByClassName("combinatorButton")[2].disabled = true
   document.getElementsByClassName("combinatorText")[2].innerHTML = "Star bar (not unlocked)"
 
-  game.combinatorUpgrades2Bought = [false, false, false, false, false, false, false, false, false, false, false]
+  game.combinatorUpgrades2Bought = [true, true, true, true, false, true, true, true, true, false, false]
 
-  game.redPermanentBought = 0
+  /*game.redPermanentBought = 0
   game.greenPermanentBought = 0
-  game.bluePermanentBought = 0
+  game.bluePermanentBought = 0*/
   $("#redPermanentBought").html(game.redPermanentBought)
   $("#redPermanentBoost").html(game.redPermanentBought * 5)
   $("#greenPermanentBought").html(game.greenPermanentBought)
@@ -2214,9 +2224,6 @@ function darkOrbReset() {
 
   document.getElementById("prestigeHotkey").style.display = "none"
   document.getElementById("toGroundFloorButton").style.display = "none"
-  document.getElementById("toFloor49Button").style.display = "none"
-  document.getElementById("toFloor99Button").style.display = "none"
-  document.getElementById("toFloor149Button").style.display = "none"
   document.getElementById("toFloor248Button").style.display = "none"
   document.getElementById("toFloor299Button").style.display = "none"
   document.getElementById("toFloor351Button").style.display = "none"
@@ -2337,7 +2344,7 @@ function buyCombinatorUpgrade2(x) {
     game.combinatorUpgrades2Bought[8] = true
     document.getElementsByClassName("combinatorUpgrade2")[8].disabled = true
   }
-  else if (x==10 && game.cocoaHoney.gte("J100000") && game.combinatorUpgrades2Bought[9] != true) {
+  else if (x==10 && game.cocoaHoney.gte("J10000") && game.combinatorUpgrades2Bought[9] != true) {
     game.combinatorUpgrades2Bought[9] = true
     document.getElementsByClassName("combinatorUpgrade2")[9].disabled = true
   }
@@ -2434,7 +2441,14 @@ function buyBloodProducer(x) {
 function bloodProduction() {
   if (game.sharkUpgrades2Bought[0] == true) {game.monsterBlood = game.monsterBlood.add(PowiainaNum("J" + game.t1bp.add(game.t1ebp).mul(game.bpMultiplier).pow(1 + (game.monsterBloodUpgradesBought[5] == true)).pow(1 + (game.monsterBloodUpgradesBought[6] == true))))}
   else if (game.monsterBloodUpgradesBought[5] == true) {game.monsterBlood = game.monsterBlood.add(game.t1bp.add(game.t1ebp).mul(game.bpMultiplier).pow(1 + (game.monsterBloodUpgradesBought[5] == true)).pow(1 + (game.monsterBloodUpgradesBought[6] == true)).tetr(1 + (game.monsterBloodUpgradesBought[7] == true)).pent(1 + (game.monsterBloodUpgradesBought[8] == true)))}
-  else {game.monsterBlood = game.monsterBlood.add(game.t1bp.add(game.t1ebp).mul(game.bpMultiplier).pow(1 + (game.monsterBloodUpgradesBought[5] == true)).pow(1 + (game.monsterBloodUpgradesBought[6] == true)))}
+  else {game.monsterBlood = game.monsterBlood.add(
+    game.t1bp
+    .add(game.t1ebp)
+    .mul(game.bpMultiplier)
+    .pow(1 + (game.monsterBloodUpgradesBought[5] == true))
+    .pow(1 + (game.monsterBloodUpgradesBought[6] == true))
+    .mul(10)
+  )}
   game.t1ebp = game.t1ebp.add(game.t2bp.add(game.t2ebp).mul(game.bpMultiplier))
   game.t2ebp = game.t2ebp.add(game.t3bp.add(game.t3ebp).mul(game.bpMultiplier))
   game.t3ebp = game.t3ebp.add(game.t4bp.add(game.t4ebp).mul(game.bpMultiplier))
@@ -2498,12 +2512,12 @@ function buyMonsterBloodUpgrade(x) {
     document.getElementsByClassName("monsterBloodUpgrade")[1].disabled = true
     game.bpMultiplier = game.bpMultiplier * 3
   }
-  else if (x==3 && game.cocoaHoney.gte("J1e69") && game.monsterBloodUpgradesBought[2] != true) {
+  else if (x==3 && game.cocoaHoney.gte("J1e62") && game.monsterBloodUpgradesBought[2] != true) {
     game.monsterBloodUpgradesBought[2] = true
     document.getElementsByClassName("monsterBloodUpgrade")[2].disabled = true
     game.bpMultiplier = game.bpMultiplier * game.darkOrbs
   }
-  else if (x==4 && game.cocoaHoney.gte("J1e87") && game.monsterBloodUpgradesBought[3] != true) {
+  else if (x==4 && game.cocoaHoney.gte("J1e80") && game.monsterBloodUpgradesBought[3] != true) {
     game.monsterBloodUpgradesBought[3] = true
     document.getElementsByClassName("monsterBloodUpgrade")[3].disabled = true
     game.t5ebp = game.t5ebp.add(100)
@@ -2518,15 +2532,15 @@ function buyMonsterBloodUpgrade(x) {
     game.monsterBloodUpgradesBought[5] = true
     document.getElementsByClassName("monsterBloodUpgrade")[5].disabled = true
   }
-  else if (x==7 && game.cocoaHoney.gte("J1e222") && game.monsterBloodUpgradesBought[6] != true) {
+  else if (x==7 && game.cocoaHoney.gte("J1e122") && game.monsterBloodUpgradesBought[6] != true) {
     game.monsterBloodUpgradesBought[6] = true
     document.getElementsByClassName("monsterBloodUpgrade")[6].disabled = true
   }
-  else if (x==8 && game.cocoaHoney.gte("J1e420") && game.monsterBloodUpgradesBought[7] != true) {
+  else if (x==8 && game.cocoaHoney.gte("J1e122") && game.monsterBloodUpgradesBought[7] != true) {
     game.monsterBloodUpgradesBought[7] = true
     document.getElementsByClassName("monsterBloodUpgrade")[7].disabled = true
   }
-  else if (x==9 && game.cocoaHoney.gte("J1e1e100") && game.monsterBloodUpgradesBought[8] != true) {
+  else if (x==9 && game.cocoaHoney.gte("J1e1e80") && game.monsterBloodUpgradesBought[8] != true) {
     game.monsterBloodUpgradesBought[8] = true
     document.getElementsByClassName("monsterBloodUpgrade")[8].disabled = true
     game.t1bp = PowiainaNum(1)
@@ -2655,7 +2669,7 @@ function buySharkUpgrade2(x) {
     game.t5ebp = PowiainaNum(0)
     bloodProductionUpdate()
   }
-  else if (x==2 && game.cocoaHoney.gte("JJ1e80") && game.sharkUpgrades2Bought[1] != true) {
+  else if (x==2 && game.cocoaHoney.gte("JJ1e58") && game.sharkUpgrades2Bought[1] != true) {
     game.sharkUpgrades2Bought[1] = true
     document.getElementsByClassName("sharkUpgrade2")[1].disabled = true
   }
@@ -2711,15 +2725,15 @@ function buyGoldenUpgrade(x) {
     game.goldenUpgradesBought[5] = true
     document.getElementsByClassName("goldenUpgrade")[5].disabled = true
   }
-  else if (x==7 && game.cocoaHoney.gte(PowiainaNum.expansion(10,5000)) && game.goldenUpgradesBought[6] != true) {
+  else if (x==7 && game.cocoaHoney.gte(PowiainaNum.expansion(10,1700)) && game.goldenUpgradesBought[6] != true) {
     game.goldenUpgradesBought[6] = true
     document.getElementsByClassName("goldenUpgrade")[6].disabled = true
   }
-  else if (x==8 && game.cocoaHoney.gte(PowiainaNum.expansion(10,15000000)) && game.goldenUpgradesBought[7] != true) {
+  else if (x==8 && game.cocoaHoney.gte(PowiainaNum.expansion(10,13000000)) && game.goldenUpgradesBought[7] != true) {
     game.goldenUpgradesBought[7] = true
     document.getElementsByClassName("goldenUpgrade")[7].disabled = true
   }
-  else if (x==9 && game.cocoaHoney.gte(PowiainaNum.expansion(10,1e8)) && game.goldenUpgradesBought[8] != true) {
+  else if (x==9 && game.cocoaHoney.gte(PowiainaNum.expansion(10,85000000)) && game.goldenUpgradesBought[8] != true) {
     game.goldenUpgradesBought[8] = true
     document.getElementsByClassName("goldenUpgrade")[8].disabled = true
   }

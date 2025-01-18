@@ -75,11 +75,18 @@ sharkQuotes = ["Thank you! I am in unrecoverable debt ;)",
 "Someday I will RULE THIS STAIRWELL!",
 "Absolutely based <img src='img/sharkDoobie.png' style='image-rendering: pixelated'>"]
 
-cocoaBarRequirements = [PowiainaNum("1e10"), PowiainaNum("1e1e6"), PowiainaNum("1e5e7"), PowiainaNum("1e5e8"), PowiainaNum("1e1e14"), PowiainaNum("1e1e32"), PowiainaNum("1e1e50"), PowiainaNum("1e1e80"), PowiainaNum("1e1e100"), PowiainaNum("10^^100"), PowiainaNum("10^^120"), PowiainaNum("10^^140"), PowiainaNum("10^^170"), PowiainaNum("10^^400"), PowiainaNum("10^^450"), PowiainaNum("10^^2000"), PowiainaNum("10^^40000"), PowiainaNum("10^^800000"), PowiainaNum("10^^20000000"), PowiainaNum("10^^^25"), PowiainaNum("10^^^10^6"), PowiainaNum("10^^^10^10"), PowiainaNum("10^^^10^100"), PowiainaNum("10^^^10^1000"), PowiainaNum("10^^^10^10000"), PowiainaNum("J10"), PowiainaNum("J1e6"), PowiainaNum("J1e9"), PowiainaNum("J1e12"), PowiainaNum("J1e16"), PowiainaNum("Infinity")]
+cocoaBarRequirements = [PowiainaNum("1e10"), PowiainaNum("1e1e6"), PowiainaNum("1e5e7"),
+ PowiainaNum("1e5e8"), PowiainaNum("1e1e14"), PowiainaNum("1e1e32"), PowiainaNum("1e1e50"),
+  PowiainaNum("1e1e80"), PowiainaNum("1e1e100"), PowiainaNum("10^^50"), PowiainaNum("10^^120"), 
+  PowiainaNum("10^^140"), PowiainaNum("10^^160"), PowiainaNum("10^^200"), PowiainaNum("10^^300"), 
+  PowiainaNum("10^^1300"), PowiainaNum("10^^40000"), PowiainaNum("10^^800000"), PowiainaNum("10^^15000000"), 
+  PowiainaNum("10^^^25"), PowiainaNum("10^^^10^6"), PowiainaNum("10^^^10^10"), PowiainaNum("10^^^10^100"), 
+  PowiainaNum("10^^^10^1000"), PowiainaNum("10^^^10^10000"), PowiainaNum("J10"), PowiainaNum("J1e6"), 
+  PowiainaNum("J1e9"), PowiainaNum("J1e12"), PowiainaNum("J1e16"), PowiainaNum("Infinity")]
 
 cbmRequirements = [1, 2, 4, 5, 9, 10, 11, 13, 15, 16, 19, 20, 26, 30]
 
-gemEelLevels = ["J1e29", "J1e35", "J1e38", "J1e41", "J1e46", "J1e49", "J1e51", "J1e59", "J1e63", "J1e65", "J1e76", "J1e79", "J1e82", "J1e91", "J1e95", "J1e108", "J1e113", "J1e118", "J1e215", "J1e414", "J10^^1e3e10", "J10^^1e1e25", "J10^^1e1e27", "J10^^1e1e37", "J10^^1e1e40", "J10^^1e1e42", "J10^^1e1e50", "J10^^1e1e54", "J10^^1e1e64", "J10^^1e1e68", "J10^^1e1e80", "J10^^1e1e85", "J10^^1e1e88", "JJ3e9", "JJ1e22", "JJ1e24", "JJ1e35", "JJ1e40", "JJ1e46", "JJ1e52", "JJ1e60", "JJ1e65", "JJJ25", "JJJ45", "JJJ65", "JJJ10000", "JJJ20000", "JJJ30000", "JJJ40000", "JJJ50000", "JJJ60000", "JJJ70000", "JJJ80000", "JJJ90000", "JJJ1e5", "JJJ5e7", "JJJ1e8", "JJJ2e8", "Infinity"]
+gemEelLevels = ["J1e29", "J1e35", "J1e38", "J1e41", "J1e46", "J1e49", "J1e51", "J1e59", "J1e63", "J1e65", "J1e76", "J1e79", "J1e82", "J1e91", "J1e95", "J1e108", "J1e113", "J1e118", "J1e215", "J1e414", "J10^^1e3e10", "J10^^1e1e25", "J10^^1e1e27", "J10^^1e1e37", "J10^^1e1e40", "J10^^1e1e42", "J10^^1e1e50", "J10^^1e1e54", "J10^^1e1e64", "J10^^1e1e68", "J10^^1e1e80", "J10^^1e1e85", "J10^^1e1e88", "JJ3e9", "JJ1e22", "JJ1e24", "JJ1e35", "JJ1e40", "JJ1e46", "JJ1e52", "JJ1e60", "JJ1e65", "JJ10{25}10", "JJ10{45}10", "JJ10{65}10", "JJJ10000", "JJJ20000", "JJJ30000", "JJJ40000", "JJJ50000", "JJJ60000", "JJJ70000", "JJJ80000", "JJJ90000", "JJJ1e5", "JJJ5e7", "JJJ1e8", "JJJ2e8", "Infinity"]
 
 sharkDialogue1 = ["WOA-WOWEE! HELLO AGAIN OLD FRIEND!",
 "I could smell you approaching from a MILE away! Sharks have that ability, you know!",
@@ -102,7 +109,8 @@ sharkDialogue3 = ["Dammnnn, you really PULLED UP on him with the GLOCK!",
 "Oh, ugh. I feel horrible. H-hold on, just give me a minute.",
 "Give me a minute... I... just..."]
 
-darkOrbRequirements = [PowiainaNum("10^^100"), PowiainaNum("10^^1800"), PowiainaNum("10^^^10^10000"), PowiainaNum("J5e15"), PowiainaNum("l0 s1 a[15.954589770191003,[1,1,1,1],[1,1,2,1]]")]
+darkOrbRequirements = [PowiainaNum("10^^50"), PowiainaNum("10^^50"), PowiainaNum("10^^^10^10000"), 
+PowiainaNum("J6000"), PowiainaNum(Infinity)]
 
 darkOrbBonuses = ["Current bonuses:<br>None",
 "Current bonuses:<br>25x XP gain<br>10x honey gain (all types)<br>Cocoa bars increase honey and vanilla honey gain<br>Cocoa bar limit is 5 higher",
