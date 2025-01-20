@@ -6,7 +6,7 @@
     let MAX_LOGP1_REPEATS = 48
     let LOG5E = 0.6213349345596119
     // Set smallTop to true to force the top value in the result below 10
-    function polarize(array, smallTop = false, searchLayer = [1, 1]) {
+    function polarize(array, smallTop = false, nosearchmax = false, searchStart=1) {
         /*
         polarize
     
@@ -17,9 +17,8 @@
         let bottom = array[0], top = 0, height = 0
         // ExpantaNum: array[0] = [0, y]
         // PowiainaNum: array[0] == y
-        let temp = array.findIndex(function (x) { return x[0] == "x" })
-        let searchMax = (temp == -1) ? array.length-1 : temp - 1
-        let counter = 0;
+        let temp = array.findIndex(function (x, index) { return x[0] == "x"&&index>searchStart })
+        let searchMax = (temp == -1)||nosearchmax ? array.length-1 : temp - 1
 
         if (!Number.isFinite(bottom)) { }
         else if (array.length <= 1) {
@@ -32,7 +31,7 @@
             }
         }
         else {
-            let elem = 1
+            let elem = searchStart
             top = array[elem][1]
             height = array[elem][0]
             var repeatCountLess = 500
@@ -61,28 +60,52 @@
                     // Prevent running top mode more times than necessary
                     if (elem == searchMax && array[elem][0] == height && !(smallTop && top >= 10)) break
 
-                    bottom = Math.log10(bottom) + top
-                    height += 1
-                    if (elem < searchMax+1 && height > array[elem][0]) elem += 1
-                    if (elem < searchMax+1) {
-                        if (height == array[elem][0]) top = array[elem][1] + 1
-                        else if (bottom < 10) { // Apply top mode multiple times
-                            let diff = array[elem][0] - height
-                            if (diff < MAX_LOGP1_REPEATS) {
-                                for (i = 0; i < diff; i++) bottom = Math.log10(bottom) + 1
+                        bottom = Math.log10(bottom) + top
+                        height += 1
+                        if (elem < searchMax+1 && height > array[elem][0]) elem += 1
+                        if (elem < searchMax+1) {
+                            if (height == array[elem][0]) top = array[elem][1] + 1
+                            else if (bottom < 10) { // Apply top mode multiple times
+                                let diff = array[elem][0] - height
+                                if (diff < MAX_LOGP1_REPEATS) {
+                                    for (i = 0; i < diff; i++) bottom = Math.log10(bottom) + 1
+                                }
+                                else bottom = 1 // The increment result is indistinguishable from 1
+                                height = array[elem][0]
+                                top = array[elem][1] + 1
                             }
-                            else bottom = 1 // The increment result is indistinguishable from 1
-                            height = array[elem][0]
-                            top = array[elem][1] + 1
+                            else top = 1
                         }
                         else top = 1
-                    }
-                    else top = 1
                 }
                 repeatCountLess--
             }
         }
         return { bottom: bottom, top: top, height: height }
+    }
+    function getTopJandlayer(num){
+        let pol = polarize(num.array, true)
+            let layerLess = new PowiainaNum(num)
+            let layer = num.getOperator("x", 1, 1)
+            layerLess.operator("x", 1, 1, 0)
+            let topJ
+            if (layerLess.lt("10^^10")) { // Below J2: use Jx = Gx
+                // layerLess is equal to (10^)^top bottom here, so calculate x in Gx directly.
+                topJ = 1 + Math.log10(Math.log10(pol.bottom) + pol.top)
+                layer += 1
+            }
+            else if (layerLess.lt("10{10}10")) { // J2 ~ J10
+                topJ = pol.height + Math.log((Math.log10(pol.bottom) + pol.top) / 2) * LOG5E
+                layer += 1
+            }
+            else { // J10 and above: an extra layer is added, thus becoming JJ1 and above, where Jx = Gx also holds
+                let nextToTopJ = pol.height + Math.log((Math.log10(pol.bottom) + pol.top) / 2) * LOG5E
+                let bottom = nextToTopJ >= 1e10 ? Math.log10(Math.log10(nextToTopJ)) : Math.log10(nextToTopJ)
+                let top = nextToTopJ >= 1e10 ? 2 : 1
+                topJ = 1 + Math.log10(Math.log10(bottom) + top)
+                layer += 2
+            }
+            return {topJ, layer}
     }
     function commaFormat(num, precision) {
         if (num === null || num === undefined) return "NaN"
@@ -256,13 +279,58 @@
             let rep = num.operator(1, 2);
             num.operator(1, 2, 1, 0);
             return "K".repeat(rep) + format(num);
+        } else if (num.lt("l0 s1 a[10,[1,999999,2,1]]")) { // 1L5 ~ L1,000,000
+            // L的UCF形式主要取决于K于J重叠的数量
+            
+            let L = 0;
+            // 先看一下K重叠了多少
+            let K = num.operator(1, 2);
 
+            // 再看一下J重叠了多少
+            let J = num.array.findIndex((a)=>{return a[0]=="x"});
+            if (J==-1) J =0
+            else J=num.array[J][1]
+            // OmegaNum数组部分可能还有剩下的
+            // 基本上可以组成 K(重复变量K次) K(变量J)
+            // 把变量J转换为Kx形式
+            a = polarize(num.array, true)
+            console.log(a)
+            if (a.bottom > 1){
+                J+=Math.log10(a.bottom)
+            }
+            if (J > 10){
+                
 
-        }
+                    // 先转换成Ex形式
+                let temp1 = Math.log10(J); // <10
+                // 转换成Fx形式
+                temp1 = 1+Math.log10(temp1); // < 2
+                // 转换成Gx形式， 因为结果一定小于1.30102，又因为x<2时Jx=Gx
+                // 转换成Jx形式
+                temp1 = 1+Math.log10(temp1); // < 1.30102
+                // 转换成Kx形式
+                temp1 = 1+Math.log10(temp1);
+                L = K+2+temp1
+                
+            } else{
+                // J不完全，需要继续将J补全
+                L=K+1+Math.log10(Math.max(J,1))
+            } 
+            let y = Math.floor(L)
+            let x = 10**(L-y)
+            return `${format(x,precision4)}L${commaFormat(y)}`;
+        }/*else if (num.lt("l0 s1 a[10,[2,5,2,1]]")){ // 1L5 ~ L^5 10
+            if (num.lt(`l0 s1 a[10,[1,${Number.MAX_SAFE_INTEGER},2,1]]`)){
+                return "L" + format(num.operator(1,2)+2)
+            }
+            let rep = num.operator(2,2);
+            num.operator(2,2,1,0);
+            return "L".repeat(rep) + format(num);
+        }*/
     }
 
     var export_object = {
-        format, polarize
+        format, polarize, getTopJandlayer
     }
     
     if (typeof define == 'function' && define.amd) {
@@ -283,5 +351,6 @@
         }
         globalThis.format = format;
         globalThis.polarize = polarize;
+        globalThis.getTopJandlayer = getTopJandlayer;
     }
 })(this);

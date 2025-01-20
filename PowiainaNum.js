@@ -877,6 +877,8 @@
             var e, f;
             var i = 1;
             var l = Math.min(this.array.length, other.array.length);
+            
+
             do {
                 var g = this.array[this.array.length - i];
                 var h = other.array[other.array.length - i];
@@ -1421,8 +1423,9 @@
                     x.array[0] = 10
                     b = true;
                 } else if (x.array[1][1] > 1) {
+                    var temp = x.array[1][1];
                     x.array.splice(1, 1, ["x", x.array[0] - 1, x.array[1][2] - 1, x.array[1][3]])
-                    x.array.push([1, x.array[1][1] - 1, 2, 1])
+                    x.array.push([1, temp - 1, 2, 1])
                     x.array[0] = 10
                     b = true;
                 }
