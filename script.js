@@ -1416,7 +1416,7 @@ function goldenHoneyGain(){
   if (game.goldenUpgradesBought[1] == true) a = a.mul(2)
   if (game.goldenUpgradesBought[2] == true) a = a.mul(2)
   if (game.goldenUpgradesBought[3] == true) a = a.mul(2)
-  if (game.goldenUpgradesBought[5]) a = a.mul(Math.log(game.goldenHoney))
+  if (game.goldenUpgradesBought[5]) a = a.mul(PowiainaNum.naturalLogarithm(game.goldenHoney))
   if (game.goldenUpgradesBought[6]) a = a.mul(game.bloodGems)
   if (game.goldenUpgradesBought[7]) a = a.mul(game.floorDifficulty)
   if (game.goldenUpgradesBought[8]) a = a.mul(25000)
