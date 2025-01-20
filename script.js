@@ -168,7 +168,7 @@ function loadGame(loadgame) {
       else { game[Object.keys(game)[i]] = loadgame[Object.keys(loadgame)[i]] }
     }
   }
-
+  game.goldenUpgrades2Bought = Array(6).fill(false)
   //Adds new sets of floors with rooms in case the player is coming from an older update
   if (game.smithFloor == 0) {
     x = Math.floor(Math.random() * 4 + 5)
