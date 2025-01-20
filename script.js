@@ -1541,7 +1541,7 @@ function battleWin() {
   if ((game.currentFloor > 350 || game.currentFloor < 500) && (Math.floor(Math.random() * 2) == 0 || game.goldenUpgradesBought[4] == true)) {
     game.goldenHoney = game.goldenHoney.add(goldenHoneyGain())
   }
-  if (game.goldenHoney.gte("eee3.4028236e38")) game.goldenHoney = new PowiainaNum("eee3.4028236e38")
+  if (game.goldenHoney.gte("ee3.4028236e38")) game.goldenHoney = new PowiainaNum("ee3.4028236e38")
 
   game.fightingMonster = false
   game.monsterAttackCooldown = 3
