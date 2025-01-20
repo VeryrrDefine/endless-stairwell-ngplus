@@ -1260,7 +1260,7 @@ function monsterEncounter() {
   if (game.currentFloor > 500) {
     game.monsterMaxHealth =
       PowiainaNum.expansion(10, PowiainaNum.ceil(
-        monsters[monsterType - 1].health.mul(7e11 * game.totalDifficulty * (Math.random() + 1))
+        monsters[monsterType - 1].health.mul(7e11 * (Math.random() + 1)).mul(game.totalDifficulty)
         .add(PowiainaNum.pow(10,game.totalDifficulty.mul(2)))
       ))
   }
