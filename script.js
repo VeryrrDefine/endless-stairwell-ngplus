@@ -5,6 +5,7 @@ function reset() {
     floorsWithRooms: [[], [], [], [], [], [], [], [], []],
     currentTip: 0,
 
+    //#region A
     specialItemsAcquired: [false, false],
 
     roomsExplored: 0,
@@ -81,12 +82,12 @@ function reset() {
     sharkUpgrades2Bought: [false, false, false, false, false, false, false],
 
     timePlayed: 0,
-
+    //#endregion 
     goldenHoney: new PowiainaNum(0),
     goldenEelHealth: 1e15,
     goldenUpgradesBought: [false, false, false, false, false, false, false, false, false],
     goldenEelDefeated: false,
-    goldenUpgrades2Bought: [false, false],
+    goldenUpgrades2Bought: [false, false, false, false, false, false],
 
     finalTime: 0,
 
@@ -732,7 +733,17 @@ function updateSmall() {
   $("#goldenEelAttackCooldown").html(format(game.monsterAttackCooldown, 1))
 }
 
+
 setInterval(updateSmall, 15)
+
+function updateSlow() {
+  if (game.goldenUpgrades2Bought[2]){
+    game.xp = PowiainaNum.expansion(11, attackExpansionlog())
+    game.maxHealth = PowiainaNum.expansion(11, attackExpansionlog())
+  }
+}
+
+setInterval(updateSlow, 200)
 
 //Update for floor/room info
 function updateInfo() {
@@ -1247,7 +1258,7 @@ function monsterEncounter() {
   //Monster health
   if (game.currentFloor > 500) {
     game.monsterMaxHealth =
-      PowiainaNum.expansion(10, Math.ceil(
+      PowiainaNum.expansion(10, PowiainaNum.ceil(
         monsters[monsterType - 1].health.mul(7e11 * game.totalDifficulty * (Math.random() + 1))
         .add(PowiainaNum.pow(10,game.totalDifficulty.mul(2)))
       ))
@@ -1335,7 +1346,7 @@ function randomItem() {
 
 function attack() {
   if (game.energy > 0) {
-    game.energy = Math.max(Math.round(game.energy - (4 + 20 / game.timeSinceAttack)), 0)
+    game.energy = Math.max(Math.round(game.energy - (4 + 20 / game.timeSinceAttack)*(game.goldenUpgrades2Bought[4] ? 0.1 : 1)), 0)
     game.timeSinceAttack = 1
     if (game.currentFloor == 349 && game.sharkCutscenesViewed == 2) { game.monsterHealth = PowiainaNum(0) }
     else { game.monsterHealth = game.monsterHealth.sub(game.attackDamage) }
@@ -1409,10 +1420,12 @@ function goldenHoneyGain(){
   if (game.goldenUpgradesBought[7]) a = a.mul(game.floorDifficulty)
   if (game.goldenUpgradesBought[8]) a = a.mul(25000)
   if (game.goldenUpgrades2Bought[1]) a = a.mul(100)
+  if (game.goldenUpgrades2Bought[5]) a = a.mul(PowiainaNum.pow(10,game.honey.max(10).slog().root(100).max(0)))
   return a.floor()
 }
 //Winning the battle
 function battleWin() {
+  //#region XPtoget
   if (game.currentFloor <= 100) { xpToGet = game.monsterMaxHealth.div(10).pow(1.3).mul(cocoaBoost) }
   else if (game.currentFloor <= 150) { xpToGet = game.monsterMaxHealth.log().pow(0.4).mul(cocoaBoost) }
   else if (game.currentFloor <= 200) {
@@ -1466,6 +1479,8 @@ function battleWin() {
     xpToGet = xpToGet.pow(1.3)
   }
   game.xp = game.xp.add(xpToGet).ceil()
+
+  //#endregion
   game.level = game.xp.div(20).pow(0.5).add(1).floor()
 
   game.maxHealth = PowiainaNum(100).mul(PowiainaNum(1.1).pow(game.level.sub(1))).floor()
@@ -1491,6 +1506,9 @@ function battleWin() {
     else if (game.darkOrbs >= 2) { game.honey = game.honey.add(100 * 2 ** game.cocoaBars) }
     else if (game.darkOrbs >= 1) { game.honey = game.honey.add(10 * 2 ** game.cocoaBars) }
     else { game.honey = game.honey.add(1) }
+  }
+  if (game.currentFloor > 500 && game.goldenUpgrades2Bought[3]){
+    game.honey = game.honey.add(PowiainaNum.tetrate(10, game.totalDifficulty))
   }
 
   if (game.combinatorUpgradesBought[1] == true && game.currentFloor > 200 && game.currentFloor <= 250) {
@@ -2785,6 +2803,22 @@ function buyGoldenUpgrade2(x) {
   if (x == 2 && game.goldenHoney.gte(1.5e13) && game.goldenUpgrades2Bought[1] != true) {
     game.goldenUpgrades2Bought[1] = true
     document.getElementsByClassName("goldenUpgrade2")[1].disabled = true
+  }
+  if (x == 3 && game.goldenHoney.gte(5e14) && game.goldenUpgrades2Bought[2] != true) {
+    game.goldenUpgrades2Bought[2] = true
+    document.getElementsByClassName("goldenUpgrade2")[2].disabled = true
+  }
+  if (x == 4 && game.goldenHoney.gte(6.5e14) && game.goldenUpgrades2Bought[3] != true) {
+    game.goldenUpgrades2Bought[3] = true
+    document.getElementsByClassName("goldenUpgrade2")[3].disabled = true
+  }
+  if (x == 5 && game.goldenHoney.gte(1e15) && game.goldenUpgrades2Bought[4] != true) {
+    game.goldenUpgrades2Bought[4] = true
+    document.getElementsByClassName("goldenUpgrade2")[4].disabled = true
+  }
+  if (x == 6 && game.goldenHoney.gte(1.5e15) && game.goldenUpgrades2Bought[5] != true) {
+    game.goldenUpgrades2Bought[5] = true
+    document.getElementsByClassName("goldenUpgrade2")[5].disabled = true
   }
 
 }

@@ -594,7 +594,7 @@
         if (other.eq(PowiainaNum.ONE)) return t.clone();
         if (!t.isint()) return PowiainaNum.NaN.clone();
         if (t.eq(2)) return new PowiainaNum(4);
-        if (t.neq(10)) {
+        if (t.neq(10) && other.lt(MAX_SAFE_INTEGER)) {
             var f = other.toNumber() - 1;
             r = t;
             for (var i = 0; f !== 0 && r.lt(PowiainaNum.MAX_SAFE_INTEGER) && i < 100; ++i) {
@@ -610,12 +610,13 @@
             //throw Error(powiainaNumError + "I can't handle that base is not 1, 2, or10")
         }
         if (other.gt(PowiainaNum.MAX_SAFE_INTEGER)) {
-            r = PowiainaNum()
+            
+            r = PowiainaNum(0)
 
             r.array = []
             r.array.push(...other.array);
             r.array.push([1, 1, 2, 1]);
-
+            
         } else {
             r = PowiainaNum()
 
