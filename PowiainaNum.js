@@ -65,8 +65,16 @@
 
     R.GRAHAMS_NUMBER = "l0 s1 a[3638334640023.7783,[1,7625597484984,1,1],[3,1,1,1],[\"x\",63,1,1]]"
 
+    // sample, Throotriadekol == {100, 100, 100, 99, 12}
+    // At there 100 => 10, {10, 10, 10, 99, 12}
+    R.THROOTRIADEKOL = "l0 s1 a [10,[10,1,99,12]]"
     //#endregion
 
+    /*
+    isPowiainaNum is a regex to judge string is a valid PowiainaNum string source.
+    */
+    var isPowiainaNum = /^[-\+]*(Infinity|NaN|(J+|J\^\d+(((\.\d*)?([Ee][-\+]*))\d*)? )?(10(\^+|\{[1-9]\d*\})|\(10(\^+|\{[1-9]\d*\})\)\^[1-9]\d* )*((\d+(\.\d*)?|\d*\.\d+)?([Ee][-\+]*))*(0|\d+(\.\d*)?|\d*\.\d+))$/;
+    var isPowiainaNum2 = /^l(\d+) s(1|0|\-1) a\[\d+((.\d*)?e\d+|\.\d*)?\,(\[(\d+((.\d*)?e\d+)?|\"x\")\,\d+((.\d*)?e\d+)?\,(\d+((.\d*)?e\d+)?|\"x\")\,\d+((.\d*)?e\d+)?\])*\]$/;
     //#region calculating
 
 
@@ -586,16 +594,16 @@
         if (other.eq(PowiainaNum.ONE)) return t.clone();
         if (!t.isint()) return PowiainaNum.NaN.clone();
         if (t.eq(2)) return new PowiainaNum(4);
-        if (t.neq(10)){
+        if (t.neq(10)) {
             var f = other.toNumber() - 1;
             r = t;
-            for(var i = 0; f !== 0 && r.lt(PowiainaNum.MAX_SAFE_INTEGER) && i < 100; ++i) {
-              if(f > 0) {
-                r = t.arrow(r)(t);
-                --f;
-              }
+            for (var i = 0; f !== 0 && r.lt(PowiainaNum.MAX_SAFE_INTEGER) && i < 100; ++i) {
+                if (f > 0) {
+                    r = t.arrow(r)(t);
+                    --f;
+                }
             }
-            if(i == 100) f = 0;
+            if (i == 100) f = 0;
             r.array.push(["x", f, 1, 1]);
             r.normalize();
             return r;
@@ -620,6 +628,7 @@
     Q.expansion = Q.eps = function (x, other) {
         return PowiainaNum(x).expansion(other)
     }
+
     P.multiExpansion = P.mulEps = function (other) {
         var t = this.clone();
         other = new PowiainaNum(other);
@@ -717,53 +726,53 @@
     //#endregion
 
     //#region arrow, pentate
-    P.pent = P.pentate = function (other){
+    P.pent = P.pentate = function (other) {
         return this.arrow(3)(other);
     }
-    Q.pent = Q.pentate = function (x, other){
-        return PowiainaNum.arrow(x,3,other);
+    Q.pent = Q.pentate = function (x, other) {
+        return PowiainaNum.arrow(x, 3, other);
     }
     /**
      * 
      * @param {Number|PowiainaNum|String} other arrow count
      * @returns {Function} a function can be called(x), this function returns {this,other,x}
      */
-    P.arrow = function (other){
+    P.arrow = function (other) {
         var t = this.clone();
-        arrows = new PowiainaNum(other);
-        if(!arrows.isint() || arrows.lt(PowiainaNum.ZERO)) return function(other) {
-          return PowiainaNum.NaN.clone();
+        var arrows = new PowiainaNum(other);
+        if (!arrows.isint() || arrows.lt(PowiainaNum.ZERO)) return function (other) {
+            return PowiainaNum.NaN.clone();
         };
-        if(arrows.eq(PowiainaNum.ZERO)) return function(other) {
-          return t.mul(other);
+        if (arrows.eq(PowiainaNum.ZERO)) return function (other) {
+            return t.mul(other);
         };
-        if(arrows.eq(PowiainaNum.ONE)) return function(other) {
-          return t.pow(other);
+        if (arrows.eq(PowiainaNum.ONE)) return function (other) {
+            return t.pow(other);
         };
-        if(arrows.eq(2)) return function(other) {
-          return t.tetr(other);
+        if (arrows.eq(2)) return function (other) {
+            return t.tetr(other);
         };
-        return function(other){
+        return function (other) {
             var depth;
-            if(arguments.length == 2) depth = arguments[1]; //must hide
+            if (arguments.length == 2) depth = arguments[1]; //must hide
             else depth = 0;
             other = new PowiainaNum(other);
             var r;
-            if(PowiainaNum.debug >= PowiainaNum.NORMAL) console.log(t + "{" + arrows + "}" + other);
-            if(t.isNaN() || other.isNaN()) return PowiainaNum.NaN.clone();
-            if(other.lt(PowiainaNum.ZERO)) return PowiainaNum.NaN.clone();
-            if(t.eq(PowiainaNum.ZERO)) {
-                if(other.eq(PowiainaNum.ONE)) return PowiainaNum.ZERO.clone();
+            if (PowiainaNum.debug >= PowiainaNum.NORMAL) console.log(t + "{" + arrows + "}" + other);
+            if (t.isNaN() || other.isNaN()) return PowiainaNum.NaN.clone();
+            if (other.lt(PowiainaNum.ZERO)) return PowiainaNum.NaN.clone();
+            if (t.eq(PowiainaNum.ZERO)) {
+                if (other.eq(PowiainaNum.ONE)) return PowiainaNum.ZERO.clone();
                 return PowiainaNum.NaN.clone();
             }
-            if(t.eq(PowiainaNum.ONE)) return PowiainaNum.ONE.clone();
-            if(other.eq(PowiainaNum.ZERO)) return PowiainaNum.ONE.clone();
-            if(other.eq(PowiainaNum.ONE)) return t.clone();
+            if (t.eq(PowiainaNum.ONE)) return PowiainaNum.ONE.clone();
+            if (other.eq(PowiainaNum.ZERO)) return PowiainaNum.ONE.clone();
+            if (other.eq(PowiainaNum.ONE)) return t.clone();
 
             // arrow > 9e15, that using 10{x}, x=arrow;
-            if (arrows.gt(PowiainaNum.MAX_SAFE_INTEGER)){
+            if (arrows.gt(PowiainaNum.MAX_SAFE_INTEGER)) {
                 r = PowiainaNum(arrows);
-                r.array.push(["x",1,1,1]);
+                r.array.push(["x", 1, 1, 1]);
                 r.normalize();
                 return r;
             }
@@ -772,72 +781,72 @@
             // arrow < 9e15
 
             // 10{x}2 = 10{x-1}10
-            if(other.eq(2)) return t.arrow(arrowsNum - 1)(t, depth + 1);
-            
+            if (other.eq(2)) return t.arrow(arrowsNum - 1)(t, depth + 1);
+
             // 我不到啊
-            if(t.max(other).gt("10{" + (arrowsNum + 1) + "}" + MAX_SAFE_INTEGER)) return t.max(other);
+            if (t.max(other).gt("10{" + (arrowsNum + 1) + "}" + MAX_SAFE_INTEGER)) return t.max(other);
 
             // this = 10{1919810}1e16 > 10{1919810}9.007e15 
             // or t{arrow}other, other>9.007e15
-            if(t.gt("10{" + arrowsNum + "}" + MAX_SAFE_INTEGER) || other.gt(PowiainaNum.MAX_SAFE_INTEGER)) {
-                
+            if (t.gt("10{" + arrowsNum + "}" + MAX_SAFE_INTEGER) || other.gt(PowiainaNum.MAX_SAFE_INTEGER)) {
+
                 // this = 10{1919810}1e16 > 10{1919810}9.007e15 
-                if(t.gt("10{" + arrowsNum + "}" + MAX_SAFE_INTEGER)) {
-                  r = t.clone();
-                  r.operatorE(arrowsNum, r.operatorE(arrowsNum) - 1);
-                  r.normalize();
-                } else if(t.gt("10{" + (arrowsNum - 1) + "}" + MAX_SAFE_INTEGER)) {
-                  r = new PowiainaNum(t.operatorE(arrowsNum - 1));
+                if (t.gt("10{" + arrowsNum + "}" + MAX_SAFE_INTEGER)) {
+                    r = t.clone();
+                    r.operatorE(arrowsNum, r.operatorE(arrowsNum) - 1);
+                    r.normalize();
+                } else if (t.gt("10{" + (arrowsNum - 1) + "}" + MAX_SAFE_INTEGER)) {
+                    r = new PowiainaNum(t.operatorE(arrowsNum - 1));
                 } else {
-                  r = PowiainaNum.ZERO;
+                    r = PowiainaNum.ZERO;
                 }
                 var j = r.add(other);
                 j.operatorE(arrowsNum, (j.operatorE(arrowsNum) || 0) + 1);
                 j.normalize();
                 return j;
             }
-            if(depth >= PowiainaNum.maxOps + 40) {
+            if (depth >= PowiainaNum.maxOps + 40) {
                 r = PowiainaNum(10);
-                r.array=[10,[arrowsNum,1,1,1]];
+                r.array = [10, [arrowsNum, 1, 1, 1]];
                 return r;
             }
             var y = other.toNumber();
             var f = Math.floor(y);
             var arrows_m1 = arrows.sub(PowiainaNum.ONE);
             r = t.arrow(arrows_m1)(y - f, depth + 1);
-            for(var i = 0, 
-                m = new PowiainaNum("10{" + (arrowsNum - 1) + "}" + MAX_SAFE_INTEGER); 
-                f !== 0 && r.lt(m) && i < 100; 
+            for (var i = 0,
+                m = new PowiainaNum("10{" + (arrowsNum - 1) + "}" + MAX_SAFE_INTEGER);
+                f !== 0 && r.lt(m) && i < 100;
                 ++i) {
-                if(f > 0) {
+                if (f > 0) {
                     r = t.arrow(arrows_m1)(r, depth + 1);
                     --f;
                 }
             }
-            if(i == 100) f = 0;
+            if (i == 100) f = 0;
             r.operatorE(arrowsNum - 1, (r.operatorE(arrowsNum - 1) + f) || f);
             r.normalize();
             return r;
         }
     }
-    Q.arrow = function(x, z, y) {
-      return new PowiainaNum(x).arrow(z)(y);
-    };
-    P.add1J = function (){
-        return PowiainaNum.chain(10, 10, this);
-    }
-    
-    P.chain=function (other,arrows){
-        return this.arrow(arrows)(other);
-    };
-    Q.chain=function (x,y,z){
+    Q.arrow = function (x, z, y) {
         return new PowiainaNum(x).arrow(z)(y);
     };
-    Q.hyper=function (z){
-      z=new PowiainaNum(z);
-      if (z.eq(PowiainaNum.ZERO)) return function(x,y){return new PowiainaNum(y).eq(PowiainaNum.ZERO)?new PowiainaNum(x):new PowiainaNum(x).add(PowiainaNum.ONE);};
-      if (z.eq(PowiainaNum.ONE)) return function(x,y){return PowiainaNum.add(x,y);};
-      return function(x,y){return new PowiainaNum(x).arrow(z.sub(2))(y);};
+    P.add1J = function () {
+        return PowiainaNum.chain(10, 10, this);
+    }
+
+    P.chain = function (other, arrows) {
+        return this.arrow(arrows)(other);
+    };
+    Q.chain = function (x, y, z) {
+        return new PowiainaNum(x).arrow(z)(y);
+    };
+    Q.hyper = function (z) {
+        z = new PowiainaNum(z);
+        if (z.eq(PowiainaNum.ZERO)) return function (x, y) { return new PowiainaNum(y).eq(PowiainaNum.ZERO) ? new PowiainaNum(x) : new PowiainaNum(x).add(PowiainaNum.ONE); };
+        if (z.eq(PowiainaNum.ONE)) return function (x, y) { return PowiainaNum.add(x, y); };
+        return function (x, y) { return new PowiainaNum(x).arrow(z.sub(2))(y); };
     };
     //#endregion
 
@@ -868,8 +877,8 @@
             var i = 1;
             var l = Math.min(this.array.length, other.array.length);
             do {
-                g = this.array[this.array.length - i];
-                h = other.array[other.array.length - i];
+                var g = this.array[this.array.length - i];
+                var h = other.array[other.array.length - i];
                 if (typeof g == "number") e = [0, g, 1, 1];
                 else e = g;
                 if (typeof h == "number") f = [0, h, 1, 1];
@@ -1078,7 +1087,7 @@
         if (a.length > 1 && 0 > i) return -0.5
         else if (0 > i) return -0.5
 
-        repeatcount = 500
+        var repeatcount = 500
         while (min != max) {
             if (a[min][3] == k && a[min][2] == j && a[min][0] == i) return min;
             if (a[max][3] == k && a[max][2] == j && a[max][0] == i) return max;
@@ -1091,7 +1100,7 @@
             }
             if (a[mid][3] < k || a[mid][2] < j || a[mid][0] < i) min = mid;
             if (a[mid][3] > k || a[mid][2] > j || a[mid][0] > i) max = mid;
-            if (--repeatcount<=0) break;
+            if (--repeatcount <= 0) break;
         }
         if (min == 0 && i == 0) {
             return min;
@@ -1300,7 +1309,7 @@
                     return 1
                 })(a, b)
             })
-            for (i=1;i<x.array.length;++i){
+            for (i = 1; i < x.array.length; ++i) {
                 // check 0 repeat count
                 if (x.array[i][0] !== 0 && (x.array[i][1] === 0 || x.array[i][1] === null || x.array[i][1] === undefined)) {
                     x.array.splice(i, 1);
@@ -1333,7 +1342,7 @@
                 }
                 b = true;
             }
-            if (x.array[x.array.length - 1][3] > MAX_SAFE_INTEGER) {
+            if (x.array[x.array.length - 1][3] > MAX_SAFE_INTEGER) { // check layer++
                 x.layer++;
                 x.array = [
                     x.array[x.array.length - 1][3]
@@ -1347,16 +1356,18 @@
                 b = true;
             }
             while (x.array.length >= 2 && x.array[0] == 1 && x.array[1][1]) {
+                // [1, [sth, 1, sth, sth]]
                 if (x.array[1][1] > 1) {
                     x.array[1][1]--;
                 } else {
                     x.array.splice(1, 1);
                 }
                 x.array[0] = 10;
+                b = true;
             }
             if (x.array.length >= 2 && x.array[0] < MAX_SAFE_INTEGER && x.array[1][0] >= 2 && x.array[1][1] == 1) {
-                
-                x.array.splice(1, 1, [x.array[1][0] - 1, x.array[0] - 1, 1, 1]);
+                // [1e9, [2, 1, sth, sth]]
+                x.array.splice(1, 1, [x.array[1][0] - 1, x.array[0] - 1, x.array[1][2], x.array[1][3]]);
 
                 x.array[0] = 10;
                 b = true
@@ -1372,6 +1383,7 @@
 
             }
             if (x.array.length >= 2 && x.array[1][0] != 1 && x.array[1][0] != "x" && x.array[1][0] < 1000) {
+                // [sth, [2, sth, sth, sth]]
                 if (x.array[0]) x.array.splice(1, 0, [x.array[1][0] - 1, x.array[0], x.array[1][2], x.array[1][3]]);
                 x.array[0] = 1;
                 if (x.array[2][1] > 1) {
@@ -1381,11 +1393,11 @@
                 } //  && x.array[1][2] == 1 && x.array[1][3] == 1
                 b = true;
             }
-            if (x.array.length >= 2 && x.array[1][0] == 'x' &&  x.array[0] < MAX_SAFE_INTEGER){
+            if (x.array.length >= 2 && x.array[1][0] == 'x' && x.array[0] < MAX_SAFE_INTEGER) {
                 // check [1000, ["x", y, 1, 1]] (like (10{x})^y sth<9e15)
 
                 // [10, [1000, 1, 1, 1], ["x", y-1, 1, 1]]
-                if (x.array[1][1] == 1){
+                if (x.array[1][1] == 1) {
                     x.array[1][0] = x.array[0];
                     x.array[0] = 10;
                 } else {
@@ -1394,22 +1406,22 @@
                     // Insert at index 1, insert [x.array[0], 1, z, w]
                     // [q, [q, 1, z, w], ["x", y, z, w]]
                     x.array.splice(1, 0, [x.array[0], 1, x.array[1][2], x.array[1][3]])
-                    
+
                     // [10, [q, 1, z, w], ["x", y-1, z, w]]
                     x.array[0] = 10;
                     x.array[2][1]--;
                 }
+                b = true;
             }
             if (x.array.length >= 2 && x.array[1][2] >= 2 && x.array[1][0] == 1 && x.array[0] < MAX_SAFE_INTEGER) {
-
+                // [8e15, [1, sth, >=2, sth]]
                 if (x.array[1][1] == 1) {
                     x.array.splice(1, 1, ["x", x.array[0] - 1, x.array[1][2] - 1, x.array[1][3]])
                     x.array[0] = 10
                     b = true;
                 } else if (x.array[1][1] > 1) {
-                    repeatLast = x.array[1][1];
                     x.array.splice(1, 1, ["x", x.array[0] - 1, x.array[1][2] - 1, x.array[1][3]])
-                    x.array.push([1, repeatLast - 1, 2, 1])
+                    x.array.push([1, x.array[1][1] - 1, 2, 1])
                     x.array[0] = 10
                     b = true;
                 }
@@ -1546,6 +1558,9 @@
     }
 
     var LONG_STRING_MIN_LENGTH = 17;
+    var log10LongString = function log10LongString(str) {
+        return Math.log10(Number(str.substring(0, LONG_STRING_MIN_LENGTH))) + (str.length - LONG_STRING_MIN_LENGTH);
+    }
     Q.fromString = function (input) {
         if (typeof input != "string") throw Error(invalidArgument + "Expected String");
         if (input[0] == "l") {
@@ -1711,9 +1726,9 @@
 
         }
     }
-    Q.fromArray = function (input){
+    Q.fromArray = function (input) {
         if (!Array.isArray(input)) {
-            throw Error("["+powiainaNumError+"] Unexcepted array")
+            throw Error("[" + powiainaNumError + "] Unexcepted array")
         }
         let x = new PowiainaNum(0);
         x.array = input;
@@ -1767,7 +1782,7 @@
             } else if (typeof input == "object" && input instanceof PowiainaNum) {
                 temp = input.clone();
 
-            }else if (typeof input == "object" && Array.isArray(input)) {
+            } else if (typeof input == "object" && Array.isArray(input)) {
                 temp = PowiainaNum.fromArray(input);
 
             }
@@ -1854,7 +1869,7 @@
 
     PowiainaNum = defineConstants(PowiainaNum);
 
-    PowiainaNum['default'] = PowiainaNum.PowiainaNum = PowiainaNum;
+    PowiainaNum.default = PowiainaNum.PowiainaNum = PowiainaNum;
 
     // Export.
 
@@ -1868,8 +1883,7 @@
 
         // Node and other environments that support module.exports.
     } else if (typeof module != 'undefined' && module.exports) {
-        module.exports = PowiainaNum
-
+        module.exports = PowiainaNum;
         // Browser
     } else {
         if (!globalScope) {
@@ -1878,6 +1892,7 @@
         }
         globalScope.PowiainaNum = PowiainaNum;
     }
+
     //#endregion
 
 })(this);

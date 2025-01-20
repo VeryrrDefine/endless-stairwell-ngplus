@@ -35,7 +35,13 @@ monsters = [
   {name: "Golden moth", health: PowiainaNum(10), damage: PowiainaNum(10)},
   {name: "Golden reaper", health: PowiainaNum(10), damage: PowiainaNum(10)},
   {name: "Golden deity", health: PowiainaNum(10), damage: PowiainaNum(10)},
-  {name: "Golden eel (boss)", health: PowiainaNum(1e15), damage: PowiainaNum(1e15)}
+  {name: "Golden eel (boss)", health: PowiainaNum(1e15), damage: PowiainaNum(1e15)}, // 37th
+  {name: "38th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "39th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "40th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "41th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "42th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "43th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
 ]
 
 tips = ["It seems these rooms have monsters in them. Killing them will give you XP, which will make you stronger. Try to get as strong as possible! If you travel further, the monsters will become tougher and it'll take longer to get back."
@@ -60,7 +66,7 @@ tips = ["It seems these rooms have monsters in them. Killing them will give you 
 "Damn, he got the glock",
 "The MAC gives you access to a whopping 150 new floors! But it seems something's in the way of you reaching floor 500...<br><br>Tier 8 enemies drop golden honey, which increases attack damage. Tier 8 enemies also use 'K', which represents a repeated number of Js (1K5 = JJJJ10).",
 "This eel is strong! Its health works a little differently, you'll be able to take off fractions of it without requiring K1e15 or more damage.",
-"Very well done! Congrats on completing the eel arc. There may be more content in the future, so stay tuned!"]
+"Very well done! You have reached floor 500! But now..."]
 
 sharkQuotes = ["Thank you! I am in unrecoverable debt ;)",
 "I- *cough* *cough* *wheeze* *cough* ... *cough cough COUGH cough* *wheeze* *cough* ... ... *cough*",
@@ -86,7 +92,12 @@ cocoaBarRequirements = [PowiainaNum("1e10"), PowiainaNum("1e1e6"), PowiainaNum("
 
 cbmRequirements = [1, 2, 4, 5, 9, 10, 11, 13, 15, 16, 19, 20, 26, 30]
 
-gemEelLevels = ["J1e29", "J1e35", "J1e38", "J1e41", "J1e46", "J1e49", "J1e51", "J1e59", "J1e63", "J1e65", "J1e76", "J1e79", "J1e82", "J1e91", "J1e95", "J1e108", "J1e113", "J1e118", "J1e215", "J1e414", "J10^^1e3e10", "J10^^1e1e25", "J10^^1e1e27", "J10^^1e1e37", "J10^^1e1e40", "J10^^1e1e42", "J10^^1e1e50", "J10^^1e1e54", "J10^^1e1e64", "J10^^1e1e68", "J10^^1e1e80", "J10^^1e1e85", "J10^^1e1e88", "JJ3e9", "JJ1e22", "JJ1e24", "JJ1e35", "JJ1e40", "JJ1e46", "JJ1e52", "JJ1e60", "JJ1e65", "JJ10{25}10", "JJ10{45}10", "JJ10{65}10", "JJJ10000", "JJJ20000", "JJJ30000", "JJJ40000", "JJJ50000", "JJJ60000", "JJJ70000", "JJJ80000", "JJJ90000", "JJJ1e5", "JJJ5e7", "JJJ1e8", "JJJ2e8", "Infinity"]
+gemEelLevels = ["J1e29", "J1e35", "J1e38", "J1e41", "J1e46", "J1e49", "J1e51", "J1e59", "J1e63", "J1e65", "J1e76", 
+"J1e79", "J1e82", "J1e91", "J1e95", "J1e108", "J1e113", "J1e118", "J1e215", "J1e414", "J10^^1e3e10", "J10^^1e1e25", 
+"J10^^1e1e27", "J10^^1e1e37", "J10^^1e1e40", "J10^^1e1e42", "J10^^1e1e50", "J10^^1e1e54", "J10^^1e1e64", "J10^^1e1e68", 
+"J10^^1e1e80", "J10^^1e1e85", "J10^^1e1e88", "JJ3e9", "JJ1e22", "JJ1e24", "JJ1e35", "JJ1e40", "JJ1e46", "JJ1e52", "JJ1e60", 
+"JJ1e65", "JJ10{25}10", "JJ10{45}10", "JJ10{65}10", "JJJ10000", "JJJ20000", "JJJ30000", "JJJ40000", "JJJ50000", "JJJ60000",
+ "JJJ70000", "JJJ80000", "JJJ90000", "JJJ1e5", "JJJ5e7", "JJJ1e8", "JJJ2e8", "l0 s1 a[19,[1,1,1,1],[1,1,2,1]]", "Infinity"]
 
 sharkDialogue1 = ["WOA-WOWEE! HELLO AGAIN OLD FRIEND!",
 "I could smell you approaching from a MILE away! Sharks have that ability, you know!",

@@ -1,22 +1,12 @@
 Mousetrap.bind('up', function() {
   if (game.roomsExplored == 0 && game.inSharkCutscene != true) {
-    if (game.currentFloor < 500 && game.goldenEelDefeated == true) floorUp()
-    else if (game.currentFloor < 499 && game.sharkUpgrades2Bought[6] == true) floorUp()
-    else if (game.currentFloor < 350 && game.monsterBloodUpgradesBought[9] == true) floorUp()
-    else if (game.currentFloor < 304 && game.combinatorUpgrades2Bought[10] == true) floorUp()
-    else if (game.currentFloor < 300 && game.combinatorUpgradesBought[9] == true) floorUp()
-    else if (game.currentFloor < 250 && game.cocoaBars >= 20) floorUp()
-    else if (game.currentFloor < 200 && game.sharkUpgradesBought[9] == true) floorUp()
-    else if (game.currentFloor < 150 && game.altarUpgradesBought[6] == true) floorUp()
-    else if (game.currentFloor < 100 && game.specialItemsAcquired[1] == true) floorUp()
-    else if (game.currentFloor < 50) floorUp()
+    if (isFloorAllowed(game.currentFloor+1)) floorUp()
   }
 })
 
 Mousetrap.bind('down', function() {
   if (game.roomsExplored == 0 && game.inSharkCutscene != true) {
-    if (game.currentFloor > -1 && (game.cocoaBars >= 10 || game.darkOrbs > 0)) floorDown()
-    else if (game.currentFloor > 0) floorDown()
+    if (isFloorAllowed(game.currentFloor-1)) floorDown()
   }
 })
 
@@ -46,6 +36,7 @@ Mousetrap.bind('p', function() {
   if (game.roomsExplored == 0) cocoaPrestige()
 })
 
+/*
 bigShotPlaying = false
 Mousetrap.bind('shift+s', function() {
   if (!bigShotPlaying) {
@@ -62,4 +53,4 @@ Mousetrap.bind('shift+s', function() {
     nowsYourChance.currentTime = 0
     bigShotPlaying = false
   }
-})
+})*/
