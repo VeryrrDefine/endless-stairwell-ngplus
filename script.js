@@ -2675,13 +2675,13 @@ function buyMonsterBloodUpgrade(x) {
     document.getElementsByClassName("monsterBloodUpgrade")[2].disabled = true
     game.bpMultiplier = game.bpMultiplier * game.darkOrbs
   }
-  else if (x == 4 && game.cocoaHoney.gte("J1e80") && game.monsterBloodUpgradesBought[3] != true) {
+  else if (x == 4 && game.cocoaHoney.gte("J1e70") && game.monsterBloodUpgradesBought[3] != true) {
     game.monsterBloodUpgradesBought[3] = true
     document.getElementsByClassName("monsterBloodUpgrade")[3].disabled = true
     game.t5ebp = game.t5ebp.add(100)
     bloodProductionUpdate()
   }
-  else if (x == 5 && game.cocoaHoney.gte("J1e100") && game.monsterBloodUpgradesBought[4] != true) {
+  else if (x == 5 && game.cocoaHoney.gte("J1e75") && game.monsterBloodUpgradesBought[4] != true) {
     game.monsterBloodUpgradesBought[4] = true
     document.getElementsByClassName("monsterBloodUpgrade")[4].disabled = true
     game.bpMultiplier = game.bpMultiplier * 10

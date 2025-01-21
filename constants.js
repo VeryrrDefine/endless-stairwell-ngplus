@@ -99,7 +99,7 @@ cocoaBarRequirements = [PowiainaNum("1e10"), PowiainaNum("1e1e6"), PowiainaNum("
 
 cbmRequirements = [1, 2, 4, 5, 9, 10, 11, 13, 15, 16, 19, 20, 26, 30]
 
-gemEelLevels = ["J1e17", "J1e18", "J1e19", "J1e20", "J1e21", "J1e22", "J1e23", "J1e30", "J1e35", "J1e40", "J1e45", 
+gemEelLevels = ["J1e15", "J1e18", "J1e19", "J1e20", "J1e21", "J1e22", "J1e23", "J1e30", "J1e35", "J1e40", "J1e45", 
 "J1e50", "J1e60", "J1e65", "J1e66", "J1e67", "J1e68", "J1e69", "J1e70", "J1e75", "J10^^1e3e10", "J10^^1e1e25", 
 "J10^^1e1e27", "J10^^1e1e37", "J10^^1e1e40", "J10^^1e1e42", "J10^^1e1e50", "J10^^1e1e54", "J10^^1e1e64", "J10^^1e1e68", 
 "J10^^1e1e80", "J10^^1e1e85", "J10^^1e1e88", "JJ3e9", "JJ1e22", "JJ1e24", "JJ1e35", "JJ1e40", "JJ1e46", "JJ1e52", "JJ1e60", 
