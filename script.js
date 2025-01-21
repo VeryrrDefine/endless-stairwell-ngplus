@@ -1,8 +1,8 @@
-
+var styleTag = document.querySelector("style#styleTag")
 function reset() {
   game = {
     currentFloor: 0,
-    floorsWithRooms: [[], [], [], [], [], [], [], [], []],
+    floorsWithRooms: [[], [], [], [], [], [], [], [], [], []],
     currentTip: 0,
 
     //#region A
@@ -87,13 +87,14 @@ function reset() {
     goldenEelHealth: 1e15,
     goldenUpgradesBought: Array(9).fill(false),
     goldenEelDefeated: false,
-    goldenUpgrades2Bought: Array(11).fill(false),
+    goldenUpgrades2Bought: Array(12).fill(false),
 
     finalTime: 0,
 
     redPermanentBought: 0,
     greenPermanentBought: 0,
-    bluePermanentBought: 0
+    bluePermanentBought: 0,
+    starPieces: 0,
   }
 
   cocoaBoost = PowiainaNum(1)
@@ -109,7 +110,7 @@ function hardReset() {
 }
 
 function save() {
-  if (game.fightingMonster == false) { localStorage.setItem("endlessStairwellSave", JSON.stringify(game)) }
+  if (game.fightingMonster == false) { localStorage.setItem("endlessStairwellSave1p2p0", JSON.stringify(game)) }
 }
 
 setInterval(save, 5000)
@@ -137,7 +138,7 @@ function importGame() {
 
 function load() {
   reset()
-  let loadgame = JSON.parse(localStorage.getItem("endlessStairwellSave"))
+  let loadgame = JSON.parse(localStorage.getItem("endlessStairwellSave1p2p0"))
   if (loadgame != null) {
     loadGame(loadgame)
   }
@@ -155,10 +156,11 @@ function isFloorAllowed(floor){
   && !(floor > 304 && game.monsterBloodUpgradesBought[9] != true)
   && !(floor > 350 && game.sharkUpgrades2Bought[6] != true)
   && !(floor > 499 && game.goldenEelDefeated != true)
-  && !(floor < 0 && game.cocoaBars < 10 && game.darkOrbs == 0)
-
-  && !(floor < -1)
-  && !(floor > 550)
+  && (!(floor < 0 && (game.starPieces==0 && (game.cocoaBars < 10 && game.darkOrbs == 0))))
+  && !(floor > 550 && !game.goldenUpgrades2Bought[11])
+  && !(floor == -2 && (!game.goldenUpgrades2Bought[11] && !game.starPieces))
+  && !(floor < -2)
+  && !(floor > 600)
 }
 function loadGame(loadgame) {
   //Sets each variable in 'game' to the equivalent variable in 'loadgame' (the saved file)
@@ -168,9 +170,10 @@ function loadGame(loadgame) {
       else { game[Object.keys(game)[i]] = loadgame[Object.keys(loadgame)[i]] }
     }
   }
-  if (!game.goldenUpgrades2Bought) game.goldenUpgrades2Bought = Array(11).fill(false)
-  if (!Array.isArray(game.goldenUpgrades2Bought)) game.goldenUpgrades2Bought = Array(11).fill(false)
-  game.goldenUpgrades2Bought.length = 11
+  if (!game.starPieces) game.starPieces = 0;
+  if (!game.goldenUpgrades2Bought) game.goldenUpgrades2Bought = Array(12).fill(false)
+  if (!Array.isArray(game.goldenUpgrades2Bought)) game.goldenUpgrades2Bought = Array(12).fill(false)
+  game.goldenUpgrades2Bought.length = 12
   //Adds new sets of floors with rooms in case the player is coming from an older update
   if (game.smithFloor == 0) {
     x = Math.floor(Math.random() * 4 + 5)
@@ -299,6 +302,19 @@ function loadGame(loadgame) {
     }
     game.floorsWithRooms[8] = game.floorsWithRooms[8].sort(function (a, b) { return a - b })
   }
+  if (game.floorsWithRooms.length < 10){
+    game.floorsWithRooms[9] = []
+    if (game.floorsWithRooms[9].length == 0) {
+      for (i = 0; i < 4; i++) {
+        x = Math.floor(Math.random() * 39 + 551)
+        if (!game.floorsWithRooms[9].includes(x)) { game.floorsWithRooms[9].push(x) }
+        else if (!game.floorsWithRooms[9].includes(x - 1)) { game.floorsWithRooms[9].push(x - 1) }
+        else if (!game.floorsWithRooms[9].includes(x - 2)) { game.floorsWithRooms[9].push(x - 2) }
+        else { game.floorsWithRooms[9].push(x - 3) }
+      }
+    }
+    game.floorsWithRooms[9] = game.floorsWithRooms[9].sort(function (a, b) { return a - b })
+  }
 
   //Changes the state of the game based on game variables
   document.getElementById("monsterDiv").style.display = "none"
@@ -341,7 +357,7 @@ function loadGame(loadgame) {
   else { $("#currentFloor").html("floor " + game.currentFloor) }
   updateFloorInfo()
 
-  if (game.roomsExplored > 0 || game.monstersKilled > 0 || game.honey > 0 || game.vanillaHoney > 0 || game.cocoaHoney.gt(0) || game.darkOrbs > 0) {
+  if (game.roomsExplored > 0 || game.monstersKilled > 0 || game.honey > 0 || game.vanillaHoney > 0 || game.cocoaHoney.gt(0) || game.darkOrbs > 0 || game.starPieces > 0) {
     document.getElementsByClassName("container")[0].style.display = "block"
     document.getElementsByClassName("container")[2].style.display = "block"
     document.getElementById("extrasDiv").style.display = "block"
@@ -396,7 +412,7 @@ function loadGame(loadgame) {
     document.getElementById("honey3").style.display = "block"
     document.getElementById("honeyText3").style.display = "block"
   }
-  if (game.goldenEelDefeated && game.roomsExplored == 0) {
+  if (game.goldenEelDefeated && game.roomsExplored == 0 && isFloorAllowed(500)) {
     document.getElementById("toFloor500Button").style.display = "block"
   }
   for (i = 0; i < game.sharkUpgradesBought.length; i++) {
@@ -450,6 +466,9 @@ function loadGame(loadgame) {
     document.getElementsByClassName("cocoaBarMilestoneDiv")[6].style.display = "inline-block"
     document.getElementsByClassName("cocoaBarMilestoneDiv")[7].style.display = "inline-block"
     document.getElementsByClassName("cocoaBarMilestoneDiv")[8].style.display = "inline-block"
+  }
+  if (game.starPieces > 0){
+    document.getElementById("starPiecesText").style.display = "block"
   }
   if (game.darkOrbs >= 2) {
     document.getElementsByClassName("cocoaBarMilestoneDiv")[9].style.display = "inline-block"
@@ -706,6 +725,9 @@ function updateSmall() {
 
   $("#darkOrbs").html(game.darkOrbs)
   $("#darkOrbRequirement").html(format(darkOrbRequirements[game.darkOrbs], 0))
+  $("#starPieces").html(game.starPieces)
+  $("#starPieceRequirement").html(format(starPieceRequirements[game.starPieces]))
+  $("#starPieceBonuses").html(starPieceBonuses[game.starPieces])
 
   $("#hyperplasm").html(format(game.hyperplasm, 0))
   if (game.combinatorUpgradesBought[5] == true) {
@@ -910,7 +932,7 @@ function updateInfo() {
       $("#floorContentsInfo").html("This floor has an enormous dark room, dimly lit with candles all around. In the middle sits a large, unknown machine.")
       document.getElementById("enterFloorButton").style.display = "none"
     }
-    else if (game.floorsWithRooms[0].includes(game.currentFloor) || game.floorsWithRooms[1].includes(game.currentFloor) || game.floorsWithRooms[2].includes(game.currentFloor) || game.floorsWithRooms[3].includes(game.currentFloor) || game.floorsWithRooms[4].includes(game.currentFloor) || game.floorsWithRooms[5].includes(game.currentFloor) || game.floorsWithRooms[6].includes(game.currentFloor) || game.floorsWithRooms[7].includes(game.currentFloor) || game.floorsWithRooms[8].includes(game.currentFloor)) {
+    else if (game.floorsWithRooms[0].includes(game.currentFloor) || game.floorsWithRooms[1].includes(game.currentFloor) || game.floorsWithRooms[2].includes(game.currentFloor) || game.floorsWithRooms[3].includes(game.currentFloor) || game.floorsWithRooms[4].includes(game.currentFloor) || game.floorsWithRooms[5].includes(game.currentFloor) || game.floorsWithRooms[6].includes(game.currentFloor) || game.floorsWithRooms[7].includes(game.currentFloor) || game.floorsWithRooms[8].includes(game.currentFloor) || game.floorsWithRooms[9].includes(game.currentFloor)) {
       document.getElementById("enterFloorButton").disabled = false
       $("#floorContentsInfo").html("This floor has a door leading to a variety of rooms.")
       document.getElementById("enterFloorButton").style.display = "block"
@@ -948,7 +970,7 @@ function updateInfo() {
     else { document.getElementById("goldenUpgradeDiv").style.display = "none" }
     if (game.currentFloor == 500) { document.getElementById("goldenUpgradeDiv2").style.display = "block" }
     else { document.getElementById("goldenUpgradeDiv2").style.display = "none" }
-    if (game.currentFloor == 499) {
+    if (game.currentFloor == 499 && !game.goldenUpgrades2Bought[11]) {
       document.getElementById("goldenEelDiv").style.display = "block"
       if (game.currentTip == 19) game.currentTip = 20
       if (game.goldenEelDefeated == false) {
@@ -957,6 +979,7 @@ function updateInfo() {
         game.goldenEelHealth = 1e15
       }
       else {
+
         game.fightingMonster = false
         document.getElementById("goldenEel").src = "img/enemy37dead.png"
         document.getElementById("goldenEelBar").style.display = "none"
@@ -984,6 +1007,8 @@ function updateInfo() {
     else {document.getElementById("endingDiv").style.display = "none"}*/
     if (game.currentFloor == -1) { document.getElementById("darkOrbDiv").style.display = "block" }
     else { document.getElementById("darkOrbDiv").style.display = "none" }
+    if (game.currentFloor == -2) { document.getElementById("starResetDiv").style.display = "block" }
+    else { document.getElementById("starResetDiv").style.display = "none" }
   }
 }
 
@@ -1009,7 +1034,8 @@ function closeTipHistory() {
 }
 
 function updateFloorInfo() {
-  if (game.currentFloor < 0) { document.getElementsByClassName("container")[1].style.backgroundColor = "#606060" }
+  if (game.currentFloor == -1) { document.getElementsByClassName("container")[1].style.backgroundColor = "#606060" }
+  else if ((game.currentFloor <= 600&&game.currentFloor>550) || game.currentFloor == -2) { document.getElementsByClassName("container")[1].style.backgroundColor = "#6200a3" }
   else if (game.currentFloor <= 100) { document.getElementsByClassName("container")[1].style.backgroundColor = "#808080" }
   else if (game.currentFloor <= 150) { document.getElementsByClassName("container")[1].style.backgroundColor = "#7090b0" }
   else if (game.currentFloor <= 200) { document.getElementsByClassName("container")[1].style.backgroundColor = "#c0b070" }
@@ -1017,7 +1043,10 @@ function updateFloorInfo() {
   else if (game.currentFloor <= 300) { document.getElementsByClassName("container")[1].style.backgroundColor = "#c09080" }
   else if (game.currentFloor <= 304) { document.getElementsByClassName("container")[1].style.backgroundColor = "#905050" }
   else if (game.currentFloor <= 350) { document.getElementsByClassName("container")[1].style.backgroundColor = "#7090b0" }
-  else { document.getElementsByClassName("container")[1].style.backgroundColor = "#c0a030" }
+  else if (game.currentFloor <= 550) { document.getElementsByClassName("container")[1].style.backgroundColor = "#c0a030" }
+  
+  if (game.currentFloor > 550 || game.currentFloor == -2) { styleTag.innerHTML="h2,#starPieceBonuses,p#info,#floorContentsInfo,#monsterAttackInfo{color:#aaaaaa;}"}
+  else { styleTag.innerHTML=""}
 }
 
 function floorUp() {
@@ -1098,7 +1127,11 @@ function enterFloor() {
   game.roomsExplored++
   game.roomsFromStairwell++
   game.totalDifficulty = PowiainaNum(game.floorDifficulty).add(game.roomsExplored / 100)
-  if (game.currentFloor >500) {
+  if (game.currentFloor >550) {
+    tierMessage = ", tier 10"
+    $("#info").html("<b>Info</b><br>You are in an endless expanse of rooms. <br><br>You have explored 1 room. You are 1 room away from the stairwell. This floor's difficulty is " + game.floorDifficulty + tierMessage + ".")
+  }
+  else if (game.currentFloor >500) {
     tierMessage = ", tier 9"
     $("#info").html("<b>Info</b><br>You are in an endless expanse of rooms. <br><br>You have explored 1 room. You are 1 room away from the stairwell. This floor's difficulty is " + game.floorDifficulty + tierMessage + ".")
   }
@@ -1198,7 +1231,7 @@ function toStairwell() {
       document.getElementById("toFloor351Button").style.display = "block"
     }
 
-    if (game.goldenEelDefeated) {
+    if (game.goldenEelDefeated && isFloorAllowed(500)) {
       document.getElementById("toFloor500Button").style.display = "block"
     }
   }
@@ -1250,6 +1283,7 @@ function monsterEncounter() {
   else if (game.currentFloor == 349) { monsterType = 30 }
   else if (game.currentFloor <= 498) { monsterType = Math.ceil(Math.random() * 6) + 30 }
   else if (game.currentFloor <= 599) { monsterType = Math.max(Math.ceil(Math.random() * 6) + 37, 38) }
+  else if (game.currentFloor <= 649) { monsterType = Math.max(Math.ceil(Math.random() * 6) + 43, 44) }
 
   if (game.currentFloor >= -1) {
     document.getElementById("monsterIcon").src =  monsterType>= 38 ? "img/blank.png":"img/enemy" + monsterType + ".png"
@@ -1259,6 +1293,8 @@ function monsterEncounter() {
 
   //Monster health
   if (game.currentFloor > 500) {
+    game.monsterMaxHealth = eps(PowiainaNum.tetrate(10,game.totalDifficulty.add(4)))
+  }else if (game.currentFloor > 500) {
     game.monsterMaxHealth =
       PowiainaNum.expansion(10, PowiainaNum.ceil(
         monsters[monsterType - 1].health.mul(7e11 * (Math.random() + 1)).mul(game.totalDifficulty)
@@ -1340,6 +1376,7 @@ function randomItem() {
       else if (game.darkOrbs >= 2) { game.vanillaHoney = game.vanillaHoney.add(100 * 2 ** game.cocoaBars) }
       else if (game.darkOrbs >= 1) { game.vanillaHoney = game.vanillaHoney.add(10 * 2 ** game.cocoaBars) }
       else { game.vanillaHoney = game.vanillaHoney.add(1) }
+      if (game.vanillaHoney.gte(1) && game.starPieces >= 1) game.vanillaHoney = game.vanillaHoney.tetrate(2)
       $("#roomInfo").html(document.getElementById("roomInfo").innerHTML + "<br><span style='color: #e8c070'>+1 vanilla honey</span>")
       $("#vanillaHoney").html(format(game.vanillaHoney, 0))
     }
@@ -1475,6 +1512,7 @@ function battleWin() {
   else if (game.darkOrbs >= 2) xpToGet = xpToGet.mul(100)
   else if (game.darkOrbs >= 1) xpToGet = xpToGet.mul(25)
   xpToGet = xpToGet.mul(30)
+  if (game.starPieces>=1 && xpToGet.gte(1)) xpToGet = xpToGet.tetrate(2)
   if (game.xp.add(xpToGet).gte(4980021) && game.sharkUpgradesBought[0] != true) {
     xpToGet = xpToGet.pow(0.9).div(5)
     $("#XPSoftcap").html(" (softcapped)")
@@ -1504,6 +1542,7 @@ function battleWin() {
   else if (game.darkOrbs >= 3) honeyplasmToGet = honeyplasmToGet.mul(10000)
   else if (game.darkOrbs >= 2) honeyplasmToGet = honeyplasmToGet.mul(100)
   else if (game.darkOrbs >= 1) honeyplasmToGet = honeyplasmToGet.mul(10)
+  if (game.starPieces>=1) honeyplasmToGet = honeyplasmToGet.pow(10)
   if (game.currentFloor > 100 && Math.floor(Math.random() * 100) < Math.min(15 + (Math.floor(game.roomsExplored / 20)), 40) * (game.floorDifficulty / 4 + 0.75))
     game.honeyplasm = game.honeyplasm.add(honeyplasmToGet)
 
@@ -1514,6 +1553,7 @@ function battleWin() {
     else if (game.darkOrbs >= 1) { game.honey = game.honey.add(10 * 2 ** game.cocoaBars) }
     else { game.honey = game.honey.add(1) }
   }
+  if (game.honey.gte(1) && game.starPieces>=1)game.honey = game.honey.tetrate(2)
   if (game.currentFloor > 500 && game.goldenUpgrades2Bought[3]){
     game.honey = game.honey.add(PowiainaNum.tetrate(10, game.totalDifficulty))
   }
@@ -1538,7 +1578,7 @@ function battleWin() {
   if (game.combinatorUpgrades2Bought[8] == true && game.currentFloor > 250 && game.currentFloor <= 300 && Math.floor(Math.random() * 10) == 0) { game.darkBars += Math.ceil(Math.random() * 3) }
   else if (game.combinatorUpgrades2Bought[6] == true && game.currentFloor > 250 && game.currentFloor <= 300 && Math.floor(Math.random() * 10) == 0) { game.darkBars++ }
 
-  if ((game.currentFloor > 350 || game.currentFloor < 500) && (Math.floor(Math.random() * 2) == 0 || game.goldenUpgradesBought[4] == true)) {
+  if ((game.currentFloor > 350 && game.currentFloor < 600) && (Math.floor(Math.random() * 2) == 0 || game.goldenUpgradesBought[4] == true)) {
     game.goldenHoney = game.goldenHoney.add(goldenHoneyGain())
   }
   if (game.goldenHoney.gte("ee3.4028236e38")) game.goldenHoney = new PowiainaNum("ee3.4028236e38")
@@ -1621,7 +1661,7 @@ function battleLose() {
   if (game.goldenUpgradesBought[0] == true) {
     document.getElementById("toFloor351Button").style.display = "block"
   }
-  if (game.goldenEelDefeated) {
+  if (game.goldenEelDefeated && isFloorAllowed(500)) {
     document.getElementById("toFloor500Button").style.display = "block"
   }
 }
@@ -1917,6 +1957,19 @@ function fillFloorsWithRooms() {
   }
   game.floorsWithRooms[8] = game.floorsWithRooms[8].sort(function (a, b) { return a - b })
 
+
+  game.floorsWithRooms[9] = []
+  if (game.floorsWithRooms[9].length == 0) {
+    for (i = 0; i < 4; i++) {
+      x = Math.floor(Math.random() * 39 + 551)
+      if (!game.floorsWithRooms[9].includes(x)) { game.floorsWithRooms[9].push(x) }
+      else if (!game.floorsWithRooms[9].includes(x - 1)) { game.floorsWithRooms[9].push(x - 1) }
+      else if (!game.floorsWithRooms[9].includes(x - 2)) { game.floorsWithRooms[9].push(x - 2) }
+      else { game.floorsWithRooms[9].push(x - 3) }
+    }
+  }
+  game.floorsWithRooms[9] = game.floorsWithRooms[9].sort(function (a, b) { return a - b })
+
 }
 
 function buyAltarUpgrade(x) {
@@ -2022,7 +2075,7 @@ function toFloor248() {
 }
 
 function toFloor299() {
-  if (game.specialItemsAcquired[1] == true) {
+  if (game.specialItemsAcquired[1] == true && isFloorAllowed(299)) {
     game.currentFloor = 299
     $("#currentFloor").html("floor " + game.currentFloor)
     document.getElementById("enterFloorButton").style.display = "none"
@@ -2045,7 +2098,7 @@ function toFloor351() {
   }
 }
 function toFloor500() {
-  if (game.specialItemsAcquired[1] == true) {
+  if (isFloorAllowed(500)) {
     game.currentFloor = 500
     $("#currentFloor").html("floor " + game.currentFloor)
     document.getElementById("enterFloorButton").style.display = "none"
@@ -2237,6 +2290,7 @@ function darkOrbPrestige() {
 }
 
 function darkOrbReset() {
+  if (game.starPieces >= 1)return;
   fillFloorsWithRooms()
   if (game.currentTip == 13) game.currentTip = 14
 
@@ -2290,7 +2344,8 @@ function darkOrbReset() {
   document.getElementsByClassName("combinatorButton")[2].disabled = true
   document.getElementsByClassName("combinatorText")[2].innerHTML = "Star bar (not unlocked)"
 
-  game.combinatorUpgrades2Bought = [true, true, true, true, false, true, true, true, true, false, false]
+  if (game.darkOrb>=4) game.combinatorUpgrades2Bought = [true, true, true, true, false, false, false, false, false, false, false]
+  else game.combinatorUpgrades2Bought = [false, false, false, false, false, false, false, false, false, false, false]
 
   /*game.redPermanentBought = 0
   game.greenPermanentBought = 0
@@ -2449,7 +2504,7 @@ function buyCombinatorUpgrade2(x) {
     game.combinatorUpgrades2Bought[9] = true
     document.getElementsByClassName("combinatorUpgrade2")[9].disabled = true
   }
-  else if (x == 11 && game.cocoaHoney.gte("J1e29") && game.darkOrbs >= 4 && game.combinatorUpgrades2Bought[10] != true) {
+  else if (x == 11 && game.cocoaHoney.gte("J1e15") && game.darkOrbs >= 4 && game.combinatorUpgrades2Bought[10] != true) {
     game.combinatorUpgrades2Bought[10] = true
     document.getElementsByClassName("combinatorUpgrade2")[10].disabled = true
     document.getElementById("hyperGemIcon").src = "img/starGem.png"
@@ -2847,6 +2902,10 @@ function buyGoldenUpgrade2(x) {
     game.goldenUpgrades2Bought[10] = true
     document.getElementsByClassName("goldenUpgrade2")[10].disabled = true
   }
+  if (x == 12 && game.goldenHoney.gte("ee3.4028236e38") && game.goldenUpgrades2Bought[11] != true) {
+    game.goldenUpgrades2Bought[11] = true
+    document.getElementsByClassName("goldenUpgrade2")[11].disabled = true
+  }
   
 }
 function buyGoldenUpgrade(x) {
@@ -2905,4 +2964,152 @@ function goldenEelAttack() {
       document.getElementById("floorUpButton").disabled = false
     }
   }
+}
+
+function starPiecePrestige() {
+  if (game.goldenHoney.gte(starPieceRequirements[game.starPieces])) {
+    if (confirm("Are you sure you want to reset EVERYTHING for a STAR PIECE?")) {
+      game.starPieces++
+      starPieceReset()
+      $("#starPieceBonuses").html(starPieceBonuses[game.starPieces])
+      
+    }
+  }
+}
+function starPieceReset(){
+  document.getElementsByClassName("container")[1].style.backgroundColor = "#808080"
+  game.sharkCutscenesViewed = 3
+  game.currentFloor = 0
+
+  game.roomsExplored = 0
+  game.roomsFromStairwell = 0
+  game.returningToStairwell = false
+  game.floorDifficulty = 0
+  game.totalDifficulty = PowiainaNum(0)
+  game.fightingMonster = false
+  game.monsterType = 0
+  game.monsterHealth = PowiainaNum(100)
+  game.monsterMaxHealth = PowiainaNum(100)
+  game.monsterAttackCooldown = 3
+  game.timeSinceAttack = 20
+  game.waitingForEnergy = false
+
+  game.monstersKilled = 0
+
+  game.xp = PowiainaNum(5000)
+
+  game.level = game.xp.div(20).pow(0.5).add(1).floor()
+  game.maxHealth = PowiainaNum(100).mul(PowiainaNum(1.1).pow(game.level.sub(1))).floor()
+  game.health = game.maxHealth
+  game.energy = 100
+  game.attackDamage = PowiainaNum(10)
+  game.honey = PowiainaNum(0)
+  game.vanillaHoney = PowiainaNum(0)
+
+  game.fleeCooldown = 0
+  document.getElementById("fleeButton").style.display = "none"
+
+  game.smithFloor = 0
+  game.buffTimes = [0, 0, 0]
+
+  fillFloorsWithRooms()
+  updateInfo()
+  game.cocoaHoney = PowiainaNum(0)
+  game.altarUpgradesBought = [false, false, false, false, true, false, false] 
+
+  game.honeyplasm = PowiainaNum(0)
+  game.sharkUpgradesBought = [false, false, true, false, false, false, false, false, false, false]
+
+  game.cocoaBars = 0
+
+  game.buffTimes = [0, 0, 0]
+
+  game.hyperplasm = PowiainaNum(0)
+  game.combinatorUpgradesBought = [false, false, false, false, false, false, false, false, false, false]
+  game.darkBars = 0
+  game.starBars = 0
+  game.specialItemsAcquired = [true, false]
+  document.getElementsByClassName("combinatorButton")[0].disabled = true
+  document.getElementsByClassName("combinatorText")[0].innerHTML = "Hyperplasm (not unlocked)"
+  document.getElementsByClassName("combinatorButton")[1].disabled = true
+  document.getElementsByClassName("combinatorText")[1].innerHTML = "Dark bar (not unlocked)"
+  document.getElementsByClassName("combinatorButton")[2].disabled = true
+  document.getElementsByClassName("combinatorText")[2].innerHTML = "Star bar (not unlocked)"
+
+  game.combinatorUpgrades2Bought = [false, false, false ,false, false, false, false, false, false, false, false]
+  game.goldenHoney=new PowiainaNum(0);
+  game.bloodGems = 0;
+  Object.assign(game, {
+    gemEelsBeaten: 0,
+        bloodGems: 0,
+        monsterBlood: PowiainaNum(0),
+        //Blood producers (I can't make these an array due to limitations with how the game is loaded)
+        t1bp: PowiainaNum(0),
+        t2bp: PowiainaNum(0),
+        t3bp: PowiainaNum(0),
+        t4bp: PowiainaNum(0),
+        t5bp: PowiainaNum(0),
+        t6bp: PowiainaNum(0),
+        t1ebp: PowiainaNum(0),
+        t2ebp: PowiainaNum(0),
+        t3ebp: PowiainaNum(0),
+        t4ebp: PowiainaNum(0),
+        t5ebp: PowiainaNum(0),
+        bpMultiplier: 1,
+        monsterBloodUpgradesBought: Array(10).fill(false),
+    sharkUpgrades2Bought: Array(7).fill(false),
+    goldenUpgradesBought: Array(9).fill(false),
+    goldenUpgrades2Bought: Array(12).fill(false),
+    })
+  /*game.redPermanentBought = 0
+  game.greenPermanentBought = 0
+  game.bluePermanentBought = 0*/
+  $("#redPermanentBought").html(game.redPermanentBought)
+  $("#redPermanentBoost").html(game.redPermanentBought * 5)
+  $("#greenPermanentBought").html(game.greenPermanentBought)
+  $("#greenPermanentBoost").html(game.greenPermanentBought * 5)
+  $("#bluePermanentBought").html(game.bluePermanentBought)
+  $("#bluePermanentBoost").html(game.bluePermanentBought * 10)
+
+  for (i = 0; i < game.altarUpgradesBought.length; i++) {
+    document.getElementsByClassName("cocoaUpgrade")[i].disabled = false
+  }
+  for (i = 0; i < game.sharkUpgradesBought.length; i++) {
+    document.getElementsByClassName("sharkUpgrade")[i].disabled = false
+  }
+
+  for (i = 0; i < cbmRequirements.length; i++) {
+    document.getElementsByClassName("cocoaBarMilestoneDiv")[i].style.backgroundColor = "#c0b070"
+  }
+  document.getElementsByClassName("cocoaBarMilestoneDiv")[5].style.backgroundColor = "#40d040"
+  
+  for (i = 0; i < game.combinatorUpgradesBought.length; i++) {
+    document.getElementsByClassName("combinatorUpgrade")[i].disabled = false
+  }
+  for (i = 0; i < game.combinatorUpgrades2Bought.length; i++) {
+    document.getElementsByClassName("combinatorUpgrade2")[i].disabled = false
+  }
+
+  document.getElementById("prestigeHotkey").style.display = "none"
+  document.getElementById("toGroundFloorButton").style.display = "none"
+  document.getElementById("toFloor248Button").style.display = "none"
+  document.getElementById("toFloor299Button").style.display = "none"
+  document.getElementById("toFloor351Button").style.display = "none"
+  document.getElementById("ringIcon").src = "img/ring.png"
+  document.getElementById("sapphireIcon").style.display = "none"
+  document.getElementById("hyperGemIcon").style.display = "none"
+  document.getElementById("glockIcon").style.display = "none"
+  document.getElementById("macIcon").style.display = "none"
+  document.getElementById("blueKeyIcon").style.display = "none"
+  document.getElementById("ringIcon").style.display = "none"
+
+  if (game.cocoaBars < 10 && game.darkOrbs == 0) document.getElementById("floorDownButton").disabled = true
+  else { document.getElementById("floorDownButton").disabled = false }
+  $("#currentFloor").html("the ground floor")
+  document.getElementById("blueKeyIcon").style.display = "none"
+  document.getElementById("ringIcon").style.display = "none"
+  $("#XPSoftcap").html("")
+  game.darkOrbs = 0
+  game.goldenUpgradesBought = Array(9).fill(false)
+  game.combinatorUpgrades2Bought=new Array(10).fill(true)
 }

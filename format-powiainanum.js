@@ -279,7 +279,7 @@
             let rep = num.operator(1, 2);
             num.operator(1, 2, 1, 0);
             return "K".repeat(rep) + format(num);
-        } else if (num.lt("l0 s1 a[10,[1,999999,2,1]]")) { // 1L5 ~ L1,000,000
+        } else if (num.lt(`l0 s1 a[10000000000,[1,8,1,1],[2,8,1,1],[3,8,1,1],[4,8,1,1],[5,8,1,1],[6,8,1,1],[7,8,1,1],[8,8,1,1],[9,8,1,1],["x",8,1,1],[1,999998,2,1]]`)) { // 1L5 ~ L1,000,000
             // L的UCF形式主要取决于K于J重叠的数量
             
             let L = 0;
@@ -290,14 +290,12 @@
             let J = num.array.findIndex((a)=>{return a[0]=="x"});
             if (J==-1) J =0
             else J=num.array[J][1]
-            // OmegaNum数组部分可能还有剩下的
+            // OmegaNum数组部分可能还有剩下的,需要把这些剩下的部分处理成Jx形式
+            let pol = polarize(num.array, true);
+            Jx = pol.height+Math.log10((Math.log10(pol.bottom) + pol.top)/2)
+            J = J+1+Math.log10(Jx);
             // 基本上可以组成 K(重复变量K次) K(变量J)
             // 把变量J转换为Kx形式
-            a = polarize(num.array, true)
-            console.log(a)
-            if (a.bottom > 1){
-                J+=Math.log10(a.bottom)
-            }
             if (J > 10){
                 
 
@@ -313,20 +311,27 @@
                 L = K+2+temp1
                 
             } else{
-                // J不完全，需要继续将J补全
                 L=K+1+Math.log10(Math.max(J,1))
             } 
             let y = Math.floor(L)
             let x = 10**(L-y)
             return `${format(x,precision4)}L${commaFormat(y)}`;
-        }/*else if (num.lt("l0 s1 a[10,[2,5,2,1]]")){ // 1L5 ~ L^5 10
+            /*
+ SSSSSSSS   BBBBBBBBB
+S           B        B
+ SSSSSSSS   BBBBBBBBB
+         S  B        B
+ SSSSSSSS   BBBBBBBBB
+
+            */
+        }else if (num.lt("l0 s1 a[10,[2,5,2,1]]")){ // 1L5 ~ L^5 10
             if (num.lt(`l0 s1 a[10,[1,${Number.MAX_SAFE_INTEGER},2,1]]`)){
                 return "L" + format(num.operator(1,2)+2)
             }
             let rep = num.operator(2,2);
             num.operator(2,2,1,0);
             return "L".repeat(rep) + format(num);
-        }*/
+        }
     }
 
     var export_object = {
@@ -354,3 +359,4 @@
         globalThis.getTopJandlayer = getTopJandlayer;
     }
 })(this);
+console.log(format(PowiainaNum.mulEps(10,999998)))

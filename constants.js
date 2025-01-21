@@ -39,9 +39,16 @@ monsters = [
   {name: "38th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
   {name: "39th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
   {name: "40th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
-  {name: "41th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
-  {name: "42th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
-  {name: "43th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "41st Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "42nd Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "43rd Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  
+  {name: "44th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "45th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "46th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "47th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "48th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
+  {name: "49th Monster", health: PowiainaNum(10), damage: PowiainaNum(10)}, 
 ]
 
 tips = ["It seems these rooms have monsters in them. Killing them will give you XP, which will make you stronger. Try to get as strong as possible! If you travel further, the monsters will become tougher and it'll take longer to get back."
@@ -92,8 +99,8 @@ cocoaBarRequirements = [PowiainaNum("1e10"), PowiainaNum("1e1e6"), PowiainaNum("
 
 cbmRequirements = [1, 2, 4, 5, 9, 10, 11, 13, 15, 16, 19, 20, 26, 30]
 
-gemEelLevels = ["J1e29", "J1e35", "J1e38", "J1e41", "J1e46", "J1e49", "J1e51", "J1e59", "J1e63", "J1e65", "J1e76", 
-"J1e79", "J1e82", "J1e91", "J1e95", "J1e108", "J1e113", "J1e118", "J1e215", "J1e414", "J10^^1e3e10", "J10^^1e1e25", 
+gemEelLevels = ["J1e17", "J1e18", "J1e19", "J1e20", "J1e21", "J1e22", "J1e23", "J1e30", "J1e35", "J1e40", "J1e45", 
+"J1e50", "J1e60", "J1e65", "J1e66", "J1e67", "J1e68", "J1e69", "J1e70", "J1e75", "J10^^1e3e10", "J10^^1e1e25", 
 "J10^^1e1e27", "J10^^1e1e37", "J10^^1e1e40", "J10^^1e1e42", "J10^^1e1e50", "J10^^1e1e54", "J10^^1e1e64", "J10^^1e1e68", 
 "J10^^1e1e80", "J10^^1e1e85", "J10^^1e1e88", "JJ3e9", "JJ1e22", "JJ1e24", "JJ1e35", "JJ1e40", "JJ1e46", "JJ1e52", "JJ1e60", 
 "JJ1e65", "JJ10{25}10", "JJ10{45}10", "JJ10{65}10", "JJJ10000", "JJJ20000", "JJJ30000", "JJJ40000", "JJJ50000", "JJJ60000",
@@ -131,3 +138,8 @@ darkOrbBonuses = ["Current bonuses:<br>None",
 "Current bonuses:<br>100x XP gain<br>100x honey gain (all types)<br>Cocoa bars increase honey and vanilla honey gain<br>Cocoa bar limit is 10 higher<br>Cocoa bars are more powerful<br>Tier 4 enemies drop more XP",
 "Current bonuses:<br>500x XP gain<br>10,000x honey gain (all types)<br>Keep some items on dark orb reset<br>Cocoa bars increase honey and vanilla honey gain<br>Cocoa bar limit is 15 higher<br>Cocoa bars are more powerful<br>Tier 4 enemies drop more XP<br>XP is set to cocoa boost amount on cocoa honey resets and cocoa bar resets",
 "Current bonuses:<br>5000x XP gain<br>1e10x honey gain (all types)<br>Keep some items on dark orb reset<br>Cocoa bars increase honey and vanilla honey gain<br>Cocoa bar limit is 20 higher<br>Cocoa bars are more powerful<br>Tier 4 and 5 enemies drop more XP<br>XP is set to cocoa boost amount on cocoa honey resets and cocoa bar resets<br>Gain cocoa bars automatically if possible, and cocoa bars no longer reset anything"]
+
+starPieceRequirements = [PowiainaNum("ee3.4028e38"),PowiainaNum(Infinity)]
+
+starPieceBonuses = ["Current bonuses:<br>None",
+"Current bonuses:<br>XP gain is tetrated by 2<br>plasmhoney gain is powered by 10<br>honey and vanillahoney tetrates by 2 per attacking monster<br>Dark Orb will no reset anything"]

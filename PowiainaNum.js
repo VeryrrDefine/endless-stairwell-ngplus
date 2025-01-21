@@ -62,7 +62,8 @@
     R.MAX_POWIAINANUM_VALUE = "l" + MAX_SAFE_INTEGER + " s1 a[" + MAX_SAFE_INTEGER + ",[" + MAX_SAFE_INTEGER + "," + MAX_SAFE_INTEGER + "," + MAX_SAFE_INTEGER + "," + MAX_SAFE_INTEGER + "]]";
     R.TETRATED_MAX_SAFE_INTEGER = "l0 s1 a[10000000000,[1," + (MAX_SAFE_INTEGER - 1).toString() + ",1,1]]";
     R.PENTATED_MAX_SAFE_INTEGER = "l0 s1 a[10000000000,[2," + (MAX_SAFE_INTEGER - 1).toString() + ",1,1]]";
-
+    R.MULTIEXPANSIONED_MAX_SAFE_INTEGER = "l0 s1 a[10000000000,[1," + (MAX_SAFE_INTEGER - 1).toString() + ",2,1]]";
+    R.POWEREXPANSIONED_MAX_SAFE_INTEGER = "l0 s1 a[10000000000,[2," + (MAX_SAFE_INTEGER - 1).toString() + ",2,1]]";
     R.GRAHAMS_NUMBER = "l0 s1 a[3638334640023.7783,[1,7625597484984,1,1],[3,1,1,1],[\"x\",63,1,1]]"
 
     // sample, Throotriadekol == {100, 100, 100, 99, 12}
@@ -609,14 +610,17 @@
             return r;
             //throw Error(powiainaNumError + "I can't handle that base is not 1, 2, or10")
         }
-        if (other.gt(PowiainaNum.MAX_SAFE_INTEGER)) {
-            
+        if (other.gt(PowiainaNum.MULTIEXPANSIONED_MAX_SAFE_INTEGER)) {
+            return other.clone();
+        }
+        else if (other.gt(PowiainaNum.MAX_SAFE_INTEGER)) {
+
             r = PowiainaNum(0)
 
             r.array = []
             r.array.push(...other.array);
             r.array.push([1, 1, 2, 1]);
-            
+
         } else {
             r = PowiainaNum()
 
@@ -640,7 +644,11 @@
         if (!t.isint()) return PowiainaNum.NaN.clone();
         if (t.eq(2)) return new PowiainaNum(4);
         if (t.neq(10)) throw Error(powiainaNumError + "I can't handle that base is not 1, 2, or10")
-        if (other.gt(PowiainaNum.MAX_SAFE_INTEGER)) {
+
+        if (other.gt(PowiainaNum.POWEREXPANSIONED_MAX_SAFE_INTEGER)) {
+            return other.clone();
+        }
+        else if (other.gt(PowiainaNum.MAX_SAFE_INTEGER)) {
             r = PowiainaNum()
 
             r.array = []
@@ -653,6 +661,37 @@
             r.array = [10]
             r.array.push([1, other.toNumber() - 1, 2, 1]);
 
+        }
+        return r.normalize();
+    }
+    Q.expansionArrow = Q.epsArrow = function (x, arrow) {
+        other = new PowiainaNum(x)
+        arrow = new PowiainaNum(arrow)
+        if (other.lte(PowiainaNum.ZERO) || !other.isint()) return PowiainaNum.NaN.clone();
+        if (!arrow.isint() || arrow.lt(1)) return PowiainaNum.NaN.clone();
+        if (other.eq(PowiainaNum.ONE)) return t.clone();
+        var r;
+        if (arrow.lt(MAX_SAFE_INTEGER)) {
+            if (other.gt("l0 s1 a[10000000000,[" + (arrow.toNumber().toString()) + "," + (MAX_SAFE_INTEGER - 1).toString() + ",1,1]]")) {
+                return other.clone();
+            }
+            else if (other.gt(PowiainaNum.MAX_SAFE_INTEGER)) {
+                r = PowiainaNum()
+
+                r.array = []
+                r.array.push(...other.array);
+                r.array.push([arrow.toNumber(), 1, 2, 1]);
+
+            } else {
+                r = PowiainaNum()
+
+                r.array = [10]
+                r.array.push([arrow.toNumber() - 1, other.toNumber() - 1, 2, 1]);
+
+            }
+        } else {
+            r = PowiainaNum(arrow)
+            r.array.push(["x", 1, 2, 1]);
         }
         return r.normalize();
     }
@@ -877,7 +916,7 @@
             var e, f;
             var i = 1;
             var l = Math.min(this.array.length, other.array.length);
-            
+
 
             do {
                 var g = this.array[this.array.length - i];
@@ -1318,6 +1357,11 @@
                     x.array.splice(i, 1);
                     --i;
                     continue;
+                }
+                // check arrow 0 and brace count >=2
+                if (x.array[i][0] == 0 && x.array[i][2] >= 2) {
+                    x.array[i][0] = "x"
+                    x.array[i][2] = x.array[i][2] - 1
                 }
 
             }

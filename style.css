@@ -1109,8 +1109,29 @@ button:hover {
   margin: 0;
 }
 
+/*star reset stuff*/
 
-
+#starResetDiv {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 390px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 81%;
+  border: 3px outset #6200a3;
+  display: none;
+}
+#starResetInnerDiv {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 364px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 73%;
+  border: 3px outset #6200a3;
+}
 
 
 
@@ -1311,6 +1332,15 @@ button:hover {
 #goldenHoneyText {
   position: absolute;
   top: 306px;
+  left: 52px;
+  line-height: 18px;
+  margin: 0;
+  display: none;
+}
+
+#starPiecesText {
+  position: absolute;
+  top: 342px;
   left: 52px;
   line-height: 18px;
   margin: 0;
