@@ -4,8 +4,27 @@
 //const ExpantaNum = require("../hyper-volume-incremental-v1/assets/scripts/technical/ExpantaNum");
 
 ; (function (globalScope) {
+    function deepCopyProps(source, target) {
+        for (let key in source) {
+            if (source.hasOwnProperty(key)) {
+                // 如果源对象的属性是对象或数组，则递归复制  
+                if ((typeof source[key] === 'object' && !(source[key] instanceof PowiainaNum)) && source[key] !== null) {
+                    // 如果目标对象没有这个属性，或者属性是null，则创建一个新的  
+                    if (!target.hasOwnProperty(key) || target[key] == null || Array.isArray(source[key]) !== Array.isArray(target[key])) {
+                        target[key] = Array.isArray(source[key]) ? [] : {};
+                    }
+                    // 递归复制属性  
+                    deepCopyProps(source[key], target[key]);
+                } else {
+                    // 如果属性不是对象或数组，则直接复制  
+                    target[key] = source[key];
+                }
+            }
+        }
+    }
+
     var PowiainaNum = {
-        maxOps: 50,
+        maxOps: 10,
 
         // Specify what format is used when serializing for JSON.stringify
         // 
@@ -32,6 +51,24 @@
         MAX_SAFE_INTEGER = 9007199254740991,
         MAX_E = Math.log10(MAX_SAFE_INTEGER), //15.954589770191003
 
+        //PowiainaNum string cache object
+        C = {
+            "0" : {array: [0], layer: 0, sign: 0},
+            "1" : {array: [1], layer: 0, sign: 0},
+            "2" : {array: [2], layer: 0, sign: 0},
+            "3" : {array: [3], layer: 0, sign: 0},
+            "4" : {array: [4], layer: 0, sign: 0},
+            /*get "5"(){
+                return {array: [5], layer: 0, sign: 0}
+            },
+            set "5"(x){
+            },*/
+            "6" : {array: [6], layer: 0, sign: 0},
+            "7" : {array: [7], layer: 0, sign: 0},
+            "8" : {array: [8], layer: 0, sign: 0},
+            "9" : {array: [9], layer: 0, sign: 0},
+            "10" : {array: [10], layer: 0, sign: 0},
+        },
         //PowiainaNum.prototype object
         P = {},
 
@@ -1278,7 +1315,7 @@
             return x;
         }
         if (Number.isInteger(x.layer)) x.layer = Math.floor(x.layer);
-        var maxWhileTime = 1000;
+        var maxWhileTime = 500;
         var whileTimeRuns = 0
         for (var i = 1; i < x.array.length; ++i) {
             var e = x.array[i]
@@ -1609,9 +1646,16 @@
     var log10LongString = function log10LongString(str) {
         return Math.log10(Number(str.substring(0, LONG_STRING_MIN_LENGTH))) + (str.length - LONG_STRING_MIN_LENGTH);
     }
-    Q.fromString = function (input) {
+    Q.fromString = function (input, nocache=false) {
+        originalInput = input;
         if (typeof input != "string") throw Error(invalidArgument + "Expected String");
-        if (input[0] == "l") {
+        if (C[input] && !nocache) {
+            var x = new PowiainaNum();
+            deepCopyProps(C[input].array, x.array)
+            x.sign = C[input].sign
+            x.layer = C[input].layer
+            return x
+        } else if (input[0] == "l") {
             let temp1 = input.indexOf("l");
             let temp2 = input.indexOf("s");
             let temp3 = input.indexOf("a");
@@ -1770,6 +1814,12 @@
             }
             if (negateIt) x.sign *= -1;
             x.normalize();
+            C[originalInput] = {}
+            deepCopyProps({
+                array: x.array,
+                layer: x.layer,
+                sign: x.sign
+            }, C[originalInput])
             return x;
 
         }
@@ -1917,6 +1967,7 @@
 
     PowiainaNum = defineConstants(PowiainaNum);
 
+    PowiainaNum.cache = C;
     PowiainaNum.default = PowiainaNum.PowiainaNum = PowiainaNum;
 
     // Export.
@@ -1939,6 +1990,7 @@
                 ? self : Function('return this')();
         }
         globalScope.PowiainaNum = PowiainaNum;
+        
     }
 
     //#endregion

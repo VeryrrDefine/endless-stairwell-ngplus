@@ -89,6 +89,8 @@ function reset() {
     goldenEelDefeated: false,
     goldenUpgrades2Bought: Array(12).fill(false),
 
+    starUpgradesBought: Array(2).fill(false),
+
     finalTime: 0,
 
     redPermanentBought: 0,
@@ -146,21 +148,21 @@ function load() {
 
 load()
 
-function isFloorAllowed(floor){
+function isFloorAllowed(floor) {
   return !(floor > 50 && game.specialItemsAcquired[1] == false)
-  && !(floor > 100 && game.altarUpgradesBought[6] != true)
-  && !(floor > 150 && game.sharkUpgradesBought[9] != true)
-  && !(floor > 200 && game.cocoaBars < 20)
-  && !(floor > 250 && game.combinatorUpgradesBought[9] != true)
-  && !(floor > 300 && game.combinatorUpgrades2Bought[10] != true)
-  && !(floor > 304 && game.monsterBloodUpgradesBought[9] != true)
-  && !(floor > 350 && game.sharkUpgrades2Bought[6] != true)
-  && !(floor > 499 && game.goldenEelDefeated != true)
-  && (!(floor < 0 && (game.starPieces==0 && (game.cocoaBars < 10 && game.darkOrbs == 0))))
-  && !(floor > 550 && !game.goldenUpgrades2Bought[11])
-  && !(floor == -2 && (!game.goldenUpgrades2Bought[11] && !game.starPieces))
-  && !(floor < -2)
-  && !(floor > 600)
+    && !(floor > 100 && game.altarUpgradesBought[6] != true)
+    && !(floor > 150 && game.sharkUpgradesBought[9] != true)
+    && !(floor > 200 && game.cocoaBars < 20)
+    && !(floor > 250 && game.combinatorUpgradesBought[9] != true)
+    && !(floor > 300 && game.combinatorUpgrades2Bought[10] != true)
+    && !(floor > 304 && game.monsterBloodUpgradesBought[9] != true)
+    && !(floor > 350 && game.sharkUpgrades2Bought[6] != true)
+    && !(floor > 499 && game.goldenEelDefeated != true)
+    && (!(floor < 0 && (game.starPieces == 0 && (game.cocoaBars < 10 && game.darkOrbs == 0))))
+    && !(floor > 550 && !game.goldenUpgrades2Bought[11])
+    && !(floor == -2 && (!game.goldenUpgrades2Bought[11] && !game.starPieces))
+    && !(floor < -2)
+    && !(floor > 600)
 }
 function loadGame(loadgame) {
   //Sets each variable in 'game' to the equivalent variable in 'loadgame' (the saved file)
@@ -174,6 +176,10 @@ function loadGame(loadgame) {
   if (!game.goldenUpgrades2Bought) game.goldenUpgrades2Bought = Array(12).fill(false)
   if (!Array.isArray(game.goldenUpgrades2Bought)) game.goldenUpgrades2Bought = Array(12).fill(false)
   game.goldenUpgrades2Bought.length = 12
+
+  if (!game.starUpgradesBought) game.starUpgradesBought = Array(3).fill(false)
+  if (!Array.isArray(game.starUpgradesBought)) game.starUpgradesBought = Array(3).fill(false)
+  game.starUpgradesBought.length = 3
   //Adds new sets of floors with rooms in case the player is coming from an older update
   if (game.smithFloor == 0) {
     x = Math.floor(Math.random() * 4 + 5)
@@ -302,7 +308,7 @@ function loadGame(loadgame) {
     }
     game.floorsWithRooms[8] = game.floorsWithRooms[8].sort(function (a, b) { return a - b })
   }
-  if (game.floorsWithRooms.length < 10){
+  if (game.floorsWithRooms.length < 10) {
     game.floorsWithRooms[9] = []
     if (game.floorsWithRooms[9].length == 0) {
       for (i = 0; i < 4; i++) {
@@ -347,11 +353,11 @@ function loadGame(loadgame) {
   for (i = 0; i < cbmRequirements.length; i++) {
     document.getElementsByClassName("cocoaBarMilestoneDiv")[i].style.backgroundColor = "#c0b070"
   }
-  
+
   updateInfo()
-  if (!isFloorAllowed(game.currentFloor+1)) { document.getElementById("floorUpButton").disabled = true }
+  if (!isFloorAllowed(game.currentFloor + 1)) { document.getElementById("floorUpButton").disabled = true }
   else { document.getElementById("floorUpButton").disabled = false }
-  if (!isFloorAllowed(game.currentFloor-1)) { document.getElementById("floorDownButton").disabled = true }
+  if (!isFloorAllowed(game.currentFloor - 1)) { document.getElementById("floorDownButton").disabled = true }
   else { document.getElementById("floorDownButton").disabled = false }
   if (game.currentFloor == 0) { $("#currentFloor").html("the ground floor") }
   else { $("#currentFloor").html("floor " + game.currentFloor) }
@@ -467,7 +473,7 @@ function loadGame(loadgame) {
     document.getElementsByClassName("cocoaBarMilestoneDiv")[7].style.display = "inline-block"
     document.getElementsByClassName("cocoaBarMilestoneDiv")[8].style.display = "inline-block"
   }
-  if (game.starPieces > 0){
+  if (game.starPieces > 0) {
     document.getElementById("starPiecesText").style.display = "block"
   }
   if (game.darkOrbs >= 2) {
@@ -559,6 +565,10 @@ function loadGame(loadgame) {
     if (game.goldenUpgrades2Bought[i] == true) { document.getElementsByClassName("goldenUpgrade2")[i].disabled = true }
     else { document.getElementsByClassName("goldenUpgrade2")[i].disabled = false }
   }
+  for (i = 0; i < game.starUpgradesBought.length; i++) {
+    if (game.starUpgradesBought[i] == true) { document.getElementsByClassName("starUpgrade")[i].disabled = true }
+    else { document.getElementsByClassName("starUpgrade")[i].disabled = false }
+  }
   if (game.goldenUpgradesBought[0] == true && game.roomsExplored == 0) {
     document.getElementById("toFloor351Button").style.display = "block"
   }
@@ -612,10 +622,10 @@ function timePlayedUp() {
 
 setInterval(timePlayedUp, 100)
 
-function attackExpansionlog(){
-  let attack = PowiainaNum.add(game.goldenHoney,5)
+function attackExpansionlog() {
+  let attack = PowiainaNum.add(game.goldenHoney, 5)
   if (game.goldenUpgrades2Bought[0]) attack = attack.mul(2)
- return attack;
+  return attack;
 }
 
 
@@ -761,7 +771,7 @@ function updateSmall() {
 setInterval(updateSmall, 15)
 
 function updateSlow() {
-  if (game.goldenUpgrades2Bought[2]){
+  if (game.goldenUpgrades2Bought[2]) {
     game.xp = PowiainaNum.expansion(11, attackExpansionlog())
     game.maxHealth = PowiainaNum.expansion(11, attackExpansionlog())
   }
@@ -831,7 +841,7 @@ function updateInfo() {
     else if (game.currentFloor == 149) {
       $("#floorContentsInfo").html("This floor has some kind of upgrade shop.")
       if (game.sharkCutscenesViewed == 3) {
-        $("#sharkText").html("*Dead noises*")
+        $("#sharkText").html("*它怎么似了*")
         document.getElementById("shark").src = "img/sharkDead.png"
         document.getElementById("enterFloorButton").style.display = "none"
       }
@@ -915,7 +925,7 @@ function updateInfo() {
         game.inSharkCutscene = true
       }
       else if (game.sharkCutscenesViewed == 3) {
-        $("#sharkText2").html("*Dead noises*")
+        $("#sharkText2").html("*它怎么似了*")
         document.getElementById("shark2").src = "img/sharkDead.png"
         document.getElementById("continueButton").style.display = "none"
       }
@@ -970,6 +980,8 @@ function updateInfo() {
     else { document.getElementById("goldenUpgradeDiv").style.display = "none" }
     if (game.currentFloor == 500) { document.getElementById("goldenUpgradeDiv2").style.display = "block" }
     else { document.getElementById("goldenUpgradeDiv2").style.display = "none" }
+    if (game.currentFloor == 551) { document.getElementById("starUpgradeDiv").style.display = "block" }
+    else { document.getElementById("starUpgradeDiv").style.display = "none" }
     if (game.currentFloor == 499 && !game.goldenUpgrades2Bought[11]) {
       document.getElementById("goldenEelDiv").style.display = "block"
       if (game.currentTip == 19) game.currentTip = 20
@@ -1035,7 +1047,7 @@ function closeTipHistory() {
 
 function updateFloorInfo() {
   if (game.currentFloor == -1) { document.getElementsByClassName("container")[1].style.backgroundColor = "#606060" }
-  else if ((game.currentFloor <= 600&&game.currentFloor>550) || game.currentFloor == -2) { document.getElementsByClassName("container")[1].style.backgroundColor = "#6200a3" }
+  else if ((game.currentFloor <= 600 && game.currentFloor > 550) || game.currentFloor == -2) { document.getElementsByClassName("container")[1].style.backgroundColor = "#6200a3" }
   else if (game.currentFloor <= 100) { document.getElementsByClassName("container")[1].style.backgroundColor = "#808080" }
   else if (game.currentFloor <= 150) { document.getElementsByClassName("container")[1].style.backgroundColor = "#7090b0" }
   else if (game.currentFloor <= 200) { document.getElementsByClassName("container")[1].style.backgroundColor = "#c0b070" }
@@ -1044,19 +1056,19 @@ function updateFloorInfo() {
   else if (game.currentFloor <= 304) { document.getElementsByClassName("container")[1].style.backgroundColor = "#905050" }
   else if (game.currentFloor <= 350) { document.getElementsByClassName("container")[1].style.backgroundColor = "#7090b0" }
   else if (game.currentFloor <= 550) { document.getElementsByClassName("container")[1].style.backgroundColor = "#c0a030" }
-  
-  if (game.currentFloor > 550 || game.currentFloor == -2) { styleTag.innerHTML="h2,#starPieceBonuses,p#info,#floorContentsInfo,#monsterAttackInfo{color:#aaaaaa;}"}
-  else { styleTag.innerHTML=""}
+
+  if (game.currentFloor > 550 || game.currentFloor == -2) { styleTag.innerHTML = "h2,#starPieceBonuses,p#info,#floorContentsInfo,#monsterAttackInfo{color:#aaaaaa;}" }
+  else { styleTag.innerHTML = "" }
 }
 
 function floorUp() {
   game.currentFloor++
   document.getElementById("floorDownButton").disabled = false
   updateFloorInfo()
-  
-  if (!isFloorAllowed(game.currentFloor+1)) { document.getElementById("floorUpButton").disabled = true }
+
+  if (!isFloorAllowed(game.currentFloor + 1)) { document.getElementById("floorUpButton").disabled = true }
   else { document.getElementById("floorUpButton").disabled = false }
-  if (!isFloorAllowed(game.currentFloor-1)) { document.getElementById("floorDownButton").disabled = true }
+  if (!isFloorAllowed(game.currentFloor - 1)) { document.getElementById("floorDownButton").disabled = true }
   else { document.getElementById("floorDownButton").disabled = false }
   if (game.currentFloor == 0) { $("#currentFloor").html("the ground floor") }
   else { $("#currentFloor").html("floor " + game.currentFloor) }
@@ -1067,9 +1079,9 @@ function floorDown() {
   game.currentFloor--
   document.getElementById("floorUpButton").disabled = false
   updateFloorInfo()
-  if (!isFloorAllowed(game.currentFloor+1)) { document.getElementById("floorUpButton").disabled = true }
+  if (!isFloorAllowed(game.currentFloor + 1)) { document.getElementById("floorUpButton").disabled = true }
   else { document.getElementById("floorUpButton").disabled = false }
-  if (!isFloorAllowed(game.currentFloor-1)) { document.getElementById("floorDownButton").disabled = true }
+  if (!isFloorAllowed(game.currentFloor - 1)) { document.getElementById("floorDownButton").disabled = true }
   else { document.getElementById("floorDownButton").disabled = false }
 
   if (game.currentFloor == 0) { $("#currentFloor").html("the ground floor") }
@@ -1127,11 +1139,11 @@ function enterFloor() {
   game.roomsExplored++
   game.roomsFromStairwell++
   game.totalDifficulty = PowiainaNum(game.floorDifficulty).add(game.roomsExplored / 100)
-  if (game.currentFloor >550) {
+  if (game.currentFloor > 550) {
     tierMessage = ", tier 10"
     $("#info").html("<b>Info</b><br>You are in an endless expanse of rooms. <br><br>You have explored 1 room. You are 1 room away from the stairwell. This floor's difficulty is " + game.floorDifficulty + tierMessage + ".")
   }
-  else if (game.currentFloor >500) {
+  else if (game.currentFloor > 500) {
     tierMessage = ", tier 9"
     $("#info").html("<b>Info</b><br>You are in an endless expanse of rooms. <br><br>You have explored 1 room. You are 1 room away from the stairwell. This floor's difficulty is " + game.floorDifficulty + tierMessage + ".")
   }
@@ -1286,19 +1298,19 @@ function monsterEncounter() {
   else if (game.currentFloor <= 649) { monsterType = Math.max(Math.ceil(Math.random() * 6) + 43, 44) }
 
   if (game.currentFloor >= -1) {
-    document.getElementById("monsterIcon").src =  monsterType>= 38 ? "img/blank.png":"img/enemy" + monsterType + ".png"
+    document.getElementById("monsterIcon").src = monsterType >= 38 ? "img/blank.png" : "img/enemy" + monsterType + ".png"
     document.getElementById("monsterIcon").style.display = "inherit";
   }
   document.getElementById("monsterName").innerHTML = monsters[monsterType - 1].name
 
   //Monster health
-  if (game.currentFloor > 500) {
-    game.monsterMaxHealth = eps(PowiainaNum.tetrate(10,game.totalDifficulty.add(4)))
-  }else if (game.currentFloor > 500) {
+  if (game.currentFloor > 550) {
+    game.monsterMaxHealth = eps(eps(PowiainaNum.tetrate(10, game.totalDifficulty.add(4))))
+  } else if (game.currentFloor > 500) {
     game.monsterMaxHealth =
-      PowiainaNum.expansion(10, PowiainaNum.ceil(
+      eps(PowiainaNum.ceil(
         monsters[monsterType - 1].health.mul(7e11 * (Math.random() + 1)).mul(game.totalDifficulty)
-        .add(PowiainaNum.pow(10,game.totalDifficulty.mul(2)))
+          .add(PowiainaNum.pow(10, game.totalDifficulty.mul(2)))
       ))
   }
   else if (game.currentFloor > 350) { game.monsterMaxHealth = PowiainaNum.expansion(11, Math.ceil(10 ** (game.totalDifficulty - 1) * (Math.random() + 1))) }
@@ -1315,9 +1327,9 @@ function monsterEncounter() {
   else if (game.currentFloor > 50) { game.monsterMaxHealth = monsters[monsterType - 1].health.mul(PowiainaNum(1.5).pow(game.totalDifficulty.mul(3).sub(1))).floor() }
   else { game.monsterMaxHealth = monsters[monsterType - 1].health.mul(PowiainaNum(1.5).pow(game.totalDifficulty.sub(1))).floor() }
   game.monsterHealth = game.monsterMaxHealth
-  if (game.currentFloor > 100 || game.currentFloor < -1) { $("#monsterHealthBarText").html(format(game.monsterHealth, 0)) }
+  if (game.monsterMaxHealth.gte("1e4503599627370496")) { $("#monsterHealthBarText").html(format(game.monsterHealth, 0)) }
   else { $("#monsterHealthBarText").html(format(game.monsterHealth, 0) + "/" + format(game.monsterMaxHealth, 0)) }
-  if (game.currentFloor > 100 || game.currentFloor < -1) document.getElementById("monsterHealthBarInner").style.width = "100%"
+  if (game.monsterMaxHealth.gte("1e4503599627370496")) document.getElementById("monsterHealthBarInner").style.width = "100%"
   else document.getElementById("monsterHealthBarInner").style.width = format(game.monsterHealth.div(game.monsterMaxHealth).mul(100), 1) + "%"
 
 
@@ -1385,14 +1397,14 @@ function randomItem() {
 
 function attack() {
   if (game.energy > 0) {
-    game.energy = Math.max(Math.round(game.energy - (4 + 20 / game.timeSinceAttack)*(game.goldenUpgrades2Bought[4] ? 0.1 : 1)), 0)
+    game.energy = Math.max(Math.round(game.energy - (4 + 20 / game.timeSinceAttack) * (game.goldenUpgrades2Bought[4] ? 0.1 : 1)), 0)
     game.timeSinceAttack = 1
     if (game.currentFloor == 349 && game.sharkCutscenesViewed == 2) { game.monsterHealth = PowiainaNum(0) }
     else { game.monsterHealth = game.monsterHealth.sub(game.attackDamage) }
     if (game.monsterHealth.lt(0)) game.monsterHealth = PowiainaNum(0)
-    if (game.currentFloor > 100 || game.currentFloor < -1) { $("#monsterHealthBarText").html(format(game.monsterHealth, 0)) }
+    if (game.monsterMaxHealth.gte("1e4503599627370496")) { $("#monsterHealthBarText").html(format(game.monsterHealth, 0)) }
     else { $("#monsterHealthBarText").html(format(game.monsterHealth, 0) + "/" + format(game.monsterMaxHealth, 0)) }
-    if (game.currentFloor > 100 || game.currentFloor < -1) document.getElementById("monsterHealthBarInner").style.width = "100%"
+    if (game.monsterMaxHealth.gte("1e4503599627370496")) document.getElementById("monsterHealthBarInner").style.width = "100%"
     document.getElementById("monsterHealthBarInner").style.width = format(game.monsterHealth.div(game.monsterMaxHealth).mul(100), 1) + "%"
     if (game.monsterHealth.lte(0)) battleWin()
   }
@@ -1423,6 +1435,13 @@ function energyUp() {
 
 setInterval(energyUp, 100)
 
+setInterval(function () {
+  if (game.starPieces >= 1) {
+    if (game.currentFloor != 499 && game.currentFloor > 100 && game.roomsExplored > 0 && game.fightingMonster == true && game.energy > 0 && game.monsterMaxHealth.lte(game.attackDamage)) {
+      attack()
+    }
+  }
+}, 300)
 
 function monsterAttack() {
   if (game.fightingMonster == true) {
@@ -1449,7 +1468,7 @@ function monsterAttack() {
 
 setInterval(monsterAttack, 100)
 
-function goldenHoneyGain(){
+function goldenHoneyGain() {
   let a = new PowiainaNum(1)
   if (game.goldenUpgradesBought[1] == true) a = a.mul(2)
   if (game.goldenUpgradesBought[2] == true) a = a.mul(2)
@@ -1459,12 +1478,14 @@ function goldenHoneyGain(){
   if (game.goldenUpgradesBought[7]) a = a.mul(game.floorDifficulty)
   if (game.goldenUpgradesBought[8]) a = a.mul(25000)
   if (game.goldenUpgrades2Bought[1]) a = a.mul(100)
-  if (game.goldenUpgrades2Bought[5]) a = a.mul(PowiainaNum.pow(10,game.honey.max(10).slog().root(100).max(0)))
+  if (game.goldenUpgrades2Bought[5]) a = a.mul(PowiainaNum.pow(10, game.honey.max(10).slog().root(100).max(0)))
   if (game.goldenUpgrades2Bought[6] && game.currentFloor > 500) a = a.mul(game.totalDifficulty.pow(1.3).max(1))
   if (game.goldenUpgrades2Bought[7] && game.currentFloor > 500) a = a.mul(game.totalDifficulty.pow(2).max(1))
   if (game.goldenUpgrades2Bought[8] && game.currentFloor > 500) a = a.mul(game.totalDifficulty.pow(2.7).max(1))
   if (game.goldenUpgrades2Bought[9]) a = a.pow(2)
   if (game.goldenUpgrades2Bought[10]) a = a.tetrate(2)
+
+  if (game.starUpgradesBought[0]) a = a.mul(game.monsterBlood)
   return a.floor()
 }
 //Winning the battle
@@ -1512,7 +1533,7 @@ function battleWin() {
   else if (game.darkOrbs >= 2) xpToGet = xpToGet.mul(100)
   else if (game.darkOrbs >= 1) xpToGet = xpToGet.mul(25)
   xpToGet = xpToGet.mul(30)
-  if (game.starPieces>=1 && xpToGet.gte(1)) xpToGet = xpToGet.tetrate(2)
+  if (game.starPieces >= 1 && xpToGet.gte(1)) xpToGet = xpToGet.tetrate(2)
   if (game.xp.add(xpToGet).gte(4980021) && game.sharkUpgradesBought[0] != true) {
     xpToGet = xpToGet.pow(0.9).div(5)
     $("#XPSoftcap").html(" (softcapped)")
@@ -1542,7 +1563,7 @@ function battleWin() {
   else if (game.darkOrbs >= 3) honeyplasmToGet = honeyplasmToGet.mul(10000)
   else if (game.darkOrbs >= 2) honeyplasmToGet = honeyplasmToGet.mul(100)
   else if (game.darkOrbs >= 1) honeyplasmToGet = honeyplasmToGet.mul(10)
-  if (game.starPieces>=1) honeyplasmToGet = honeyplasmToGet.pow(10)
+  if (game.starPieces >= 1) honeyplasmToGet = honeyplasmToGet.pow(10)
   if (game.currentFloor > 100 && Math.floor(Math.random() * 100) < Math.min(15 + (Math.floor(game.roomsExplored / 20)), 40) * (game.floorDifficulty / 4 + 0.75))
     game.honeyplasm = game.honeyplasm.add(honeyplasmToGet)
 
@@ -1553,8 +1574,8 @@ function battleWin() {
     else if (game.darkOrbs >= 1) { game.honey = game.honey.add(10 * 2 ** game.cocoaBars) }
     else { game.honey = game.honey.add(1) }
   }
-  if (game.honey.gte(1) && game.starPieces>=1)game.honey = game.honey.tetrate(2)
-  if (game.currentFloor > 500 && game.goldenUpgrades2Bought[3]){
+  if (game.honey.gte(1) && game.starPieces >= 1) game.honey = game.honey.tetrate(2)
+  if (game.currentFloor > 500 && game.goldenUpgrades2Bought[3]) {
     game.honey = game.honey.add(PowiainaNum.tetrate(10, game.totalDifficulty))
   }
 
@@ -1581,7 +1602,7 @@ function battleWin() {
   if ((game.currentFloor > 350 && game.currentFloor < 600) && (Math.floor(Math.random() * 2) == 0 || game.goldenUpgradesBought[4] == true)) {
     game.goldenHoney = game.goldenHoney.add(goldenHoneyGain())
   }
-  if (game.goldenHoney.gte("ee3.4028236e38")) game.goldenHoney = new PowiainaNum("ee3.4028236e38")
+  if (!game.starUpgradesBought[0] && game.goldenHoney.gte("ee3.4028236e38")) game.goldenHoney = new PowiainaNum("ee3.4028236e38")
 
   game.fightingMonster = false
   game.monsterAttackCooldown = 3
@@ -2290,7 +2311,7 @@ function darkOrbPrestige() {
 }
 
 function darkOrbReset() {
-  if (game.starPieces >= 1)return;
+  if (game.starPieces >= 1) return;
   fillFloorsWithRooms()
   if (game.currentTip == 13) game.currentTip = 14
 
@@ -2344,7 +2365,7 @@ function darkOrbReset() {
   document.getElementsByClassName("combinatorButton")[2].disabled = true
   document.getElementsByClassName("combinatorText")[2].innerHTML = "Star bar (not unlocked)"
 
-  if (game.darkOrb>=4) game.combinatorUpgrades2Bought = [true, true, true, true, false, false, false, false, false, false, false]
+  if (game.darkOrb >= 4) game.combinatorUpgrades2Bought = [true, true, true, true, false, false, false, false, false, false, false]
   else game.combinatorUpgrades2Bought = [false, false, false, false, false, false, false, false, false, false, false]
 
   /*game.redPermanentBought = 0
@@ -2514,7 +2535,7 @@ function buyCombinatorUpgrade2(x) {
 }
 
 function buyBloodProducer(x) {
-  if (game.sharkUpgrades2Bought[0] == true) {
+  if (game.sharkUpgrades2Bought[0] || game.starUpgradesBought[0]) {
     if (x == 1 && PowiainaNum(game.bloodGems).gte(game.t1bp.mul(1000))) {
       game.t1bp = game.t1bp.add(1)
       bloodProductionUpdate()
@@ -2595,7 +2616,23 @@ function buyBloodProducer(x) {
 }
 
 function bloodProduction() {
-  if (game.sharkUpgrades2Bought[0] == true) { game.monsterBlood = game.monsterBlood.add(PowiainaNum("J" + game.t1bp.add(game.t1ebp).mul(game.bpMultiplier).pow(1 + (game.monsterBloodUpgradesBought[5] == true)).pow(1 + (game.monsterBloodUpgradesBought[6] == true)))) }
+  if (game.starUpgradesBought[0]) {
+    x = PowiainaNum.pow(10,
+      PowiainaNum.pow(10,
+        PowiainaNum.pow(10,
+          game.t1bp.add(game.t1ebp).mul(game.bpMultiplier)
+            .pow(1 + (game.monsterBloodUpgradesBought[5] == true))
+            .pow(1 + (game.monsterBloodUpgradesBought[6] == true))
+        )
+      )
+    )
+    game.monsterBlood = game.monsterBlood.add(
+      eps(
+        x.pentate(game.starUpgradesBought[1] ? 10 : 1).pentate(game.starUpgradesBought[2] ? x : 1)
+      )
+    )
+  }
+  else if (game.sharkUpgrades2Bought[0] == true) { game.monsterBlood = game.monsterBlood.add(PowiainaNum("J" + game.t1bp.add(game.t1ebp).mul(game.bpMultiplier).pow(1 + (game.monsterBloodUpgradesBought[5] == true)).pow(1 + (game.monsterBloodUpgradesBought[6] == true)))) }
   else if (game.monsterBloodUpgradesBought[5] == true) { game.monsterBlood = game.monsterBlood.add(game.t1bp.add(game.t1ebp).mul(game.bpMultiplier).pow(1 + (game.monsterBloodUpgradesBought[5] == true)).pow(1 + (game.monsterBloodUpgradesBought[6] == true)).tetr(1 + (game.monsterBloodUpgradesBought[7] == true)).pent(1 + (game.monsterBloodUpgradesBought[8] == true))) }
   else {
     game.monsterBlood = game.monsterBlood.add(
@@ -2774,7 +2811,7 @@ function sharkDialogueContinue() {
 
     }
     else {
-      $("#sharkText2").html("*Dead noises*")
+      $("#sharkText2").html("*它怎么似了*")
       game.sharkCutscenesViewed = 3
       document.getElementById("floorUpButton").disabled = false
       document.getElementById("floorDownButton").disabled = false
@@ -2827,7 +2864,7 @@ function buySharkUpgrade2(x) {
     game.t5ebp = PowiainaNum(0)
     bloodProductionUpdate()
   }
-  else if (x == 2 && game.cocoaHoney.gte("JJ1e58") && game.sharkUpgrades2Bought[1] != true) {
+  else if (x == 2 && game.cocoaHoney.gte("JJ1e40") && game.sharkUpgrades2Bought[1] != true) {
     game.sharkUpgrades2Bought[1] = true
     document.getElementsByClassName("sharkUpgrade2")[1].disabled = true
   }
@@ -2856,7 +2893,34 @@ function buySharkUpgrade2(x) {
     if (game.currentTip == 18) game.currentTip = 19
   }
 }
+function buyStarUpgrade(x) {
+  if (x == 1 && game.goldenHoney.gte("ee3.4028e38") && game.starPieces >= 1 && game.starUpgradesBought[0] != true) {
+    game.starUpgradesBought[0] = true
+    document.getElementsByClassName("starUpgrade")[0].disabled = true
 
+    game.t1bp = PowiainaNum(1)
+    game.t2bp = PowiainaNum(0)
+    game.t3bp = PowiainaNum(0)
+    game.t4bp = PowiainaNum(0)
+    game.t5bp = PowiainaNum(0)
+    game.t6bp = PowiainaNum(0)
+    game.t1ebp = PowiainaNum(0)
+    game.t2ebp = PowiainaNum(0)
+    game.t3ebp = PowiainaNum(0)
+    game.t4ebp = PowiainaNum(0)
+    game.t5ebp = PowiainaNum(0)
+    bloodProductionUpdate()
+  }
+  if (x == 2 && game.goldenHoney.gte(eps("eeee100")) && game.starUpgradesBought[1] != true) {
+    game.starUpgradesBought[1] = true
+    document.getElementsByClassName("starUpgrade")[1].disabled = true
+  }
+  if (x == 3 && game.goldenHoney.gte(eps("(10^^)^8 10")) && game.starUpgradesBought[2] != true) {
+    game.starUpgradesBought[2] = true
+    document.getElementsByClassName("starUpgrade")[2].disabled = true
+  }
+
+}
 function buyGoldenUpgrade2(x) {
   if (x == 1 && game.goldenHoney.gte(1e13) && game.goldenUpgrades2Bought[0] != true) {
     game.goldenUpgrades2Bought[0] = true
@@ -2886,15 +2950,15 @@ function buyGoldenUpgrade2(x) {
     game.goldenUpgrades2Bought[6] = true
     document.getElementsByClassName("goldenUpgrade2")[6].disabled = true
   }
-  if (x == 8 && game.goldenHoney.gte(5e16) && game.goldenUpgrades2Bought[7] != true) {
+  if (x == 8 && game.goldenHoney.gte(5.000e15) && game.goldenUpgrades2Bought[7] != true) {
     game.goldenUpgrades2Bought[7] = true
     document.getElementsByClassName("goldenUpgrade2")[7].disabled = true
   }
-  if (x == 9 && game.goldenHoney.gte(5e18) && game.goldenUpgrades2Bought[8] != true) {
+  if (x == 9 && game.goldenHoney.gte(1e18) && game.goldenUpgrades2Bought[8] != true) {
     game.goldenUpgrades2Bought[8] = true
     document.getElementsByClassName("goldenUpgrade2")[8].disabled = true
   }
-  if (x == 10 && game.goldenHoney.gte(2e21) && game.goldenUpgrades2Bought[9] != true) {
+  if (x == 10 && game.goldenHoney.gte(5e18) && game.goldenUpgrades2Bought[9] != true) {
     game.goldenUpgrades2Bought[9] = true
     document.getElementsByClassName("goldenUpgrade2")[9].disabled = true
   }
@@ -2906,7 +2970,7 @@ function buyGoldenUpgrade2(x) {
     game.goldenUpgrades2Bought[11] = true
     document.getElementsByClassName("goldenUpgrade2")[11].disabled = true
   }
-  
+
 }
 function buyGoldenUpgrade(x) {
   if (x == 1 && game.cocoaHoney.gte(PowiainaNum.expansion(10, 10)) && game.goldenUpgradesBought[0] != true) {
@@ -2918,15 +2982,15 @@ function buyGoldenUpgrade(x) {
     game.goldenUpgradesBought[1] = true
     document.getElementsByClassName("goldenUpgrade")[1].disabled = true
   }
-  else if (x == 3 && game.cocoaHoney.gte(PowiainaNum.expansion(10, 25)) && game.goldenUpgradesBought[2] != true) {
+  else if (x == 3 && game.cocoaHoney.gte(PowiainaNum.expansion(10, 16)) && game.goldenUpgradesBought[2] != true) {
     game.goldenUpgradesBought[2] = true
     document.getElementsByClassName("goldenUpgrade")[2].disabled = true
   }
-  else if (x == 4 && game.cocoaHoney.gte(PowiainaNum.expansion(10, 50)) && game.goldenUpgradesBought[3] != true) {
+  else if (x == 4 && game.cocoaHoney.gte(PowiainaNum.expansion(10, 17)) && game.goldenUpgradesBought[3] != true) {
     game.goldenUpgradesBought[3] = true
     document.getElementsByClassName("goldenUpgrade")[3].disabled = true
   }
-  else if (x == 5 && game.cocoaHoney.gte(PowiainaNum.expansion(10, 100)) && game.goldenUpgradesBought[4] != true) {
+  else if (x == 5 && game.cocoaHoney.gte(PowiainaNum.expansion(10, 18)) && game.goldenUpgradesBought[4] != true) {
     game.goldenUpgradesBought[4] = true
     document.getElementsByClassName("goldenUpgrade")[4].disabled = true
   }
@@ -2972,11 +3036,11 @@ function starPiecePrestige() {
       game.starPieces++
       starPieceReset()
       $("#starPieceBonuses").html(starPieceBonuses[game.starPieces])
-      
+
     }
   }
 }
-function starPieceReset(){
+function starPieceReset() {
   document.getElementsByClassName("container")[1].style.backgroundColor = "#808080"
   game.sharkCutscenesViewed = 3
   game.currentFloor = 0
@@ -3015,7 +3079,7 @@ function starPieceReset(){
   fillFloorsWithRooms()
   updateInfo()
   game.cocoaHoney = PowiainaNum(0)
-  game.altarUpgradesBought = [false, false, false, false, true, false, false] 
+  game.altarUpgradesBought = [false, false, false, false, true, false, false]
 
   game.honeyplasm = PowiainaNum(0)
   game.sharkUpgradesBought = [false, false, true, false, false, false, false, false, false, false]
@@ -3036,31 +3100,31 @@ function starPieceReset(){
   document.getElementsByClassName("combinatorButton")[2].disabled = true
   document.getElementsByClassName("combinatorText")[2].innerHTML = "Star bar (not unlocked)"
 
-  game.combinatorUpgrades2Bought = [false, false, false ,false, false, false, false, false, false, false, false]
-  game.goldenHoney=new PowiainaNum(0);
+  game.combinatorUpgrades2Bought = [false, false, false, false, false, false, false, false, false, false, false]
+  game.goldenHoney = new PowiainaNum(0);
   game.bloodGems = 0;
   Object.assign(game, {
     gemEelsBeaten: 0,
-        bloodGems: 0,
-        monsterBlood: PowiainaNum(0),
-        //Blood producers (I can't make these an array due to limitations with how the game is loaded)
-        t1bp: PowiainaNum(0),
-        t2bp: PowiainaNum(0),
-        t3bp: PowiainaNum(0),
-        t4bp: PowiainaNum(0),
-        t5bp: PowiainaNum(0),
-        t6bp: PowiainaNum(0),
-        t1ebp: PowiainaNum(0),
-        t2ebp: PowiainaNum(0),
-        t3ebp: PowiainaNum(0),
-        t4ebp: PowiainaNum(0),
-        t5ebp: PowiainaNum(0),
-        bpMultiplier: 1,
-        monsterBloodUpgradesBought: Array(10).fill(false),
+    bloodGems: 0,
+    monsterBlood: PowiainaNum(0),
+    //Blood producers (I can't make these an array due to limitations with how the game is loaded)
+    t1bp: PowiainaNum(0),
+    t2bp: PowiainaNum(0),
+    t3bp: PowiainaNum(0),
+    t4bp: PowiainaNum(0),
+    t5bp: PowiainaNum(0),
+    t6bp: PowiainaNum(0),
+    t1ebp: PowiainaNum(0),
+    t2ebp: PowiainaNum(0),
+    t3ebp: PowiainaNum(0),
+    t4ebp: PowiainaNum(0),
+    t5ebp: PowiainaNum(0),
+    bpMultiplier: 1,
+    monsterBloodUpgradesBought: Array(10).fill(false),
     sharkUpgrades2Bought: Array(7).fill(false),
     goldenUpgradesBought: Array(9).fill(false),
     goldenUpgrades2Bought: Array(12).fill(false),
-    })
+  })
   /*game.redPermanentBought = 0
   game.greenPermanentBought = 0
   game.bluePermanentBought = 0*/
@@ -3082,7 +3146,7 @@ function starPieceReset(){
     document.getElementsByClassName("cocoaBarMilestoneDiv")[i].style.backgroundColor = "#c0b070"
   }
   document.getElementsByClassName("cocoaBarMilestoneDiv")[5].style.backgroundColor = "#40d040"
-  
+
   for (i = 0; i < game.combinatorUpgradesBought.length; i++) {
     document.getElementsByClassName("combinatorUpgrade")[i].disabled = false
   }
@@ -3111,5 +3175,5 @@ function starPieceReset(){
   $("#XPSoftcap").html("")
   game.darkOrbs = 0
   game.goldenUpgradesBought = Array(9).fill(false)
-  game.combinatorUpgrades2Bought=new Array(10).fill(true)
+  game.combinatorUpgrades2Bought = new Array(10).fill(true)
 }
